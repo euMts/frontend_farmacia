@@ -1,0 +1,36 @@
+{
+  "historyData": [
+    {
+      "id": "0",
+      "title": "20 Registros",
+      "time": "2023-05-18 02:29"
+    },
+    {
+      "id": "1",
+      "title": "12 Registros",
+      "time": "2023-05-18 02:19"
+    },
+    {
+      "id": "2",
+      "title": "10 Registros",
+      "time": "2023-05-18 01:29"
+    },
+    {
+      "id": "3",
+      "title": "120 Registros",
+      "time": "2023-05-18 00:29"
+    }
+  ],
+  "mainSalesData": [
+    { "label": "NomeProduto1", "value": 400 },
+    { "label": "NomeProduto2", "value": 430 },
+    { "label": "NomeProduto3", "value": 448 },
+    { "label": "NomeProduto4", "value": 470 },
+    { "label": "NomeProduto5", "value": 540 },
+    { "label": "NomeProduto6", "value": 580 },
+    { "label": "NomeProduto7", "value": 690 },
+    { "label": "NomeProduto8", "value": 1100 },
+    { "label": "NomeProduto9", "value": 1200 },
+    { "label": "NomeProduto10", "value": 1380 }
+  ]
+}
