@@ -24,7 +24,7 @@ export default function EditEstoqueModal({
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [newProductName, setNewProductName] = useState("");
   const [newProductQuantity, setNewProductQuantity] = useState("");
-  const [newProductValue, setNewProductValue] = useState("");
+  const [newProductUnity, setNewProductUnity] = useState("");
 
   const handleNewProductName = (newValue) => {
     setNewProductName(newValue.target.value);
@@ -32,8 +32,8 @@ export default function EditEstoqueModal({
   const handleNewProductQuantity = (newValue) => {
     setNewProductQuantity(newValue.target.value);
   };
-  const handleNewProductValue = (newValue) => {
-    setNewProductValue(newValue.target.value);
+  const handleNewProductUnity = (newValue) => {
+    setNewProductUnity(newValue.target.value);
   };
 
   const handleEditModalOpen = () => setEditModalOpen(true);
@@ -47,7 +47,7 @@ export default function EditEstoqueModal({
     console.log(`editando produto de ID ${idProduto}`);
     console.log(`novo nome ${newProductName}`);
     console.log(`nova quantidade ${newProductQuantity}`);
-    console.log(`novo valor unitario ${newProductValue}`);
+    console.log(`nova unidade de medida ${newProductUnity}`);
     try {
       const response = await api.patch(`/produto/${idProduto}`);
       if (response.status === 200) {
@@ -64,6 +64,7 @@ export default function EditEstoqueModal({
   const handleEdit = (idProduto) => {
     editApi(idProduto);
   };
+
   return (
     <>
       <MenuItem onClick={() => handleEditModalOpen()} sx={{ color: "black" }}>
@@ -111,8 +112,8 @@ export default function EditEstoqueModal({
             Valor Unitário:
           </Typography>
           <TextField
-            onChange={handleNewProductValue}
-            label={"valorUnitarioProduto"}
+            onChange={handleNewProductUnity}
+            label={unidadeMedida}
             placeholder=""
           />
           <ModalButtons>

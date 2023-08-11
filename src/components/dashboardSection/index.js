@@ -95,7 +95,7 @@ const DashboardPage = () => {
               <Grid item xs={12} sm={6} md={3}>
                 <CardsWidget
                   pagePath="..//vendasestoque"
-                  title1="Vendas / Estoque"
+                  title1="Vendas"
                   title2="Visualizar e adicionar informações específicas no sistema"
                   color="#04297A"
                   bgcolor="#D0F2FF"
@@ -154,7 +154,7 @@ const DashboardPage = () => {
           <UnderInfoContainer>
             <FirstLineContainer style={{ marginBottom: "35px" }}>
               <MainSales
-                style={{ width: "1090px" }}
+                style={{ width: "600px" }}
                 title="Principais vendas"
                 subheader="Produtos mais vendidos de todos os tempos"
                 chartData={dashboardData.mainSalesData}
@@ -162,7 +162,7 @@ const DashboardPage = () => {
 
               <History
                 style={{
-                  width: "400px",
+                  width: "300px",
                   // height: "90%",
                 }}
                 title="Resumo histórico"

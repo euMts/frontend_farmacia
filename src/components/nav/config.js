@@ -1,33 +1,37 @@
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import TrackChangesIcon from '@mui/icons-material/TrackChanges';
-import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import { BsCart4 } from "react-icons/bs";
+import { Icon } from "@iconify/react";
 
 const navConfig = [
   {
-    title: 'dashboard',
-    path: '/dashboard',
+    title: "Dashboard",
+    path: "/dashboard",
     icon: <TrendingUpIcon />,
   },
   {
-    title: 'Vendas / Estoque',
-    path: '/vendasestoque',
-    icon: <TrackChangesIcon />,
+    title: "Vendas / Estoque",
+    path: "/vendasestoque",
+    icon: <BsCart4 style={{ fontSize: "25px" }} />,
+  },
+  {
+    title: "Panorama",
+    path: "/panorama",
+    icon: (
+      <Icon style={{ fontSize: "25px" }} icon="ic:baseline-perm-data-setting" />
+    ),
   },
   // {
-  //   title: 'blog',
-  //   path: '/dashboard/blog',
-  //   icon: icon('ic_blog'),
+  //   title: "Histórico",
+  //   path: "/historico",
+  //   icon: <Icon style={{ fontSize: "25px" }} icon="ic:baseline-history" />,
   // },
-  // {
-  //   title: 'login',
-  //   path: '/login',
-  //   icon: icon('ic_lock'),
-  // },
-  // {
-  //   title: 'Not found',
-  //   path: '/404',
-  //   icon: icon('ic_disabled'),
-  // },
+  {
+    title: "Predição",
+    path: "/predicao",
+    icon: (
+      <Icon style={{ fontSize: "25px" }} icon="fluent:predictions-20-filled" />
+    ),
+  },
 ];
 
 export default navConfig;

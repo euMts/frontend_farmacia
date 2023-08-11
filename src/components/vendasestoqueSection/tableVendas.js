@@ -258,13 +258,13 @@ export default function TableVendas() {
               {option}
             </li>
           )}
-          style={{ minWidth: 150, maxWidth: "100%" }}
+          style={{ minWidth: 180, maxWidth: "100%" }}
           renderInput={(params) => (
             <TextField {...params} label="Produto" placeholder="" />
           )}
         />
 
-        <Button onClick={handleClearFilters} variant={"outlined"}>
+        <Button onClick={handleClearFilters} variant={"outlined"} style={{height: "56px"}}>
           Limpar Filtros
         </Button>
       </div>

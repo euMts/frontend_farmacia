@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { filter } from "lodash";
 import {
   Card,
@@ -67,6 +67,38 @@ export default function VendasestoquePage() {
   const [vendaMenuOpen, setVendaMenuOpen] = useState(null);
   const [estoqueMenuOpen, setEstoqueMenuOpen] = useState(null);
 
+  const inputRef = useRef(null);
+
+  const handleClick = () => {
+    // 👇️ open file input box on click of another element
+    inputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const fileObj = event.target.files && event.target.files[0];
+    if (!fileObj) {
+      return;
+    }
+
+    // console.log("fileObj is", fileObj);
+
+    // 👇️ reset file input
+    event.target.value = null;
+
+    // 👇️ is now empty
+    // console.log(event.target.files);
+
+    // 👇️ can still access file object here
+    // console.log(fileObj);
+    // console.log(fileObj.name);
+    
+    if(event.target.id === "receberVenda"){
+      console.log("receber venda")
+    } else if(event.target.id === "receberEstoque"){
+      console.log("receber estoque")
+    }
+  };
+
   const handleOpenVendaMenu = (event) => {
     setVendaMenuOpen(event.currentTarget);
   };
@@ -97,13 +129,13 @@ export default function VendasestoquePage() {
           padding: "35px 0 0 0",
           backgroundColor: COLORS.white,
           // overflow: "auto",
-          height: "900px",
+          // height: "900px",
         }}
       >
         <Box style={{ width: "100%" }}>
           <Container>
             <Typography
-              variant="h2"
+              variant="h4"
               gutterBottom
               style={{ fontWeight: "bold" }}
             >
@@ -129,7 +161,7 @@ export default function VendasestoquePage() {
               >
                 <Stack>
                   <Typography
-                    variant="h5"
+                    variant="h6"
                     gutterBottom
                     style={{ fontWeight: "bold" }}
                   >
@@ -165,7 +197,7 @@ export default function VendasestoquePage() {
               >
                 <Stack>
                   <Typography
-                    variant="h5"
+                    variant="h6"
                     gutterBottom
                     style={{ fontWeight: "bold" }}
                   >
@@ -214,15 +246,23 @@ export default function VendasestoquePage() {
           },
         }}
       >
-        <MenuItem onClick={() => console.log("csv venda")}>
+        <MenuItem onClick={handleClick}>
+          <input
+            style={{ display: "none" }}
+            ref={inputRef}
+            type="file"
+            id="receberVenda"
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            onChange={handleFileChange}
+          />
           <UploadFileIcon style={{ marginRight: "4px" }} />
           Arquivo CSV
         </MenuItem>
 
-        <MenuItem onClick={() => console.log("manual venda")}>
+        {/* <MenuItem onClick={() => console.log("manual venda")}>
           <AddIcon style={{ marginRight: "4px" }} />
           Manualmente
-        </MenuItem>
+        </MenuItem> */}
       </Popover>
 
       <Popover
@@ -243,15 +283,23 @@ export default function VendasestoquePage() {
           },
         }}
       >
-        <MenuItem onClick={() => console.log("csv estoque")}>
+        <MenuItem onClick={handleClick}>
+          <input
+            style={{ display: "none" }}
+            ref={inputRef}
+            type="file"
+            id="receberEstoque"
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            onChange={handleFileChange}
+          />
           <UploadFileIcon style={{ marginRight: "4px" }} />
           Arquivo CSV
         </MenuItem>
 
-        <MenuItem onClick={() => console.log("manual estoque")}>
+        {/* <MenuItem onClick={() => console.log("manual estoque")}>
           <AddIcon style={{ marginRight: "4px" }} />
           Manualmente
-        </MenuItem>
+        </MenuItem> */}
       </Popover>
     </>
   );

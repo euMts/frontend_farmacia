@@ -160,14 +160,22 @@ export default function TableEstoque() {
 
   const [adicionadoEmAtual, setAdicionadoEmAtual] = useState("");
 
+  const [quantidadeProdutoAtual, setQuantidadeProdutoAtual] = useState("");
+
+  const [unidadeMedidaAtual, setUnidadeMedidaAtual] = useState("");
+
   const handleOpenMenu = (event) => {
     const idProduto = event.currentTarget.getAttribute("idProduto");
     const nomeProduto = event.currentTarget.getAttribute("nomeProduto");
     const adicionadoEm = event.currentTarget.getAttribute("adicionadoEm");
+    const quantidadeProduto = event.currentTarget.getAttribute("quantidade");
+    const unidadeMedida = event.currentTarget.getAttribute("unidade_medida");
     setOpen(event.currentTarget);
     setIdProdutoAtual(idProduto);
     setNomeProdutoAtual(nomeProduto);
     setAdicionadoEmAtual(adicionadoEm);
+    setQuantidadeProdutoAtual(quantidadeProduto);
+    setUnidadeMedidaAtual(unidadeMedida);
   };
 
   const handleCloseMenu = () => {
@@ -245,13 +253,13 @@ export default function TableEstoque() {
               {option}
             </li>
           )}
-          style={{ minWidth: 150, maxWidth: "100%" }}
+          style={{ minWidth: 180, maxWidth: "100%" }}
           renderInput={(params) => (
             <TextField {...params} label="Produto" placeholder="" />
           )}
         />
 
-        <Button onClick={handleClearFilters} variant={"outlined"}>
+        <Button onClick={handleClearFilters} variant={"outlined"} style={{height: "56px"}}>
           Limpar Filtros
         </Button>
       </div>
@@ -325,6 +333,8 @@ export default function TableEstoque() {
                           idProduto={id}
                           nomeProduto={nome}
                           adicionadoEm={adicionado_em}
+                          quantidade={quantidade}
+                          unidade_medida={unidade_medida}
                           onClick={handleOpenMenu}
                         >
                           <Iconify icon={"eva:more-vertical-fill"} />
@@ -393,9 +403,9 @@ export default function TableEstoque() {
       >
         <EditEstoqueModal
           idProduto={idProdutoAtual}
-          // nomeProduto={nomeProdutoAtual}
-          // quantidadeProduto={quantidadeProdutoAtual}
-          // valorUnitarioProduto={valorUnitarioProdutoAtual}
+          nomeProduto={nomeProdutoAtual}
+          quantidadeProduto={quantidadeProdutoAtual}
+          unidadeMedida={unidadeMedidaAtual}
           onClose={handleCloseMenu}
         />
 
