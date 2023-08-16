@@ -16,6 +16,7 @@ import {
   FilterLinePredicaoLeft,
   FilterLinePredicaoRight,
 } from "./predicaoPageElements";
+import PredicaoChart from "../predicaoChart";
 
 const productOptions = [
   "produto 1",
@@ -54,7 +55,7 @@ const PredicaoPage = () => {
           padding: "35px 0 0 0",
           backgroundColor: COLORS.white,
           // overflow: "auto",
-          height: "900px",
+          height: "600px",
         }}
       >
         <Box style={{ width: "100%" }}>
@@ -105,6 +106,7 @@ const PredicaoPage = () => {
                 </Button>
               </FilterLinePredicaoRight>
             </FilterLinePredicao>
+            <PredicaoChart />
           </Container>
         </Box>
       </div>

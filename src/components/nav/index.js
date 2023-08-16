@@ -75,13 +75,13 @@ export default function Nav({ openNav, onCloseNav }) {
           justifyContent: "left",
         }}
       >
-        <Link to="/" sx={{ display: "contents" }}>
+        {/* <Link to="/" sx={{ display: "contents" }}>
           <img
             src={Logo}
             style={{ width: "65px", height: "65px" }}
             alt={"appLogo"}
           />
-        </Link>
+        </Link> */}
       </Box>
 
       <Box sx={{ mb: 5, mx: 2.5 }}>

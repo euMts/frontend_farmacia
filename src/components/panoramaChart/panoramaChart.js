@@ -1,67 +1,117 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
   Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
+  ResponsiveContainer,
+} from "recharts";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-export const options = {
-  plugins: {
-    title: {
-      display: true,
-    //   text: "Chart.js Bar Chart - Stacked",
-    },
+const data = [
+  {
+    name: "Janeiro",
+    matheus: 4000,
+    amanda: 2400,
+    joao: 2400,
+    mosconi: 2400,
+    luis: 6400,
   },
-  responsive: true,
-  scales: {
-    x: {
-      stacked: true,
-    },
-    y: {
-      stacked: true,
-    },
+  {
+    name: "Fevereiro",
+    carlos: 4000,
+    teste: 2400,
+    matheus: 6400,
+    valdir: 2400,
+    isabela: 7400,
   },
-};
-
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: labels.map(() => 20),
-      backgroundColor: "rgb(255, 99, 132)",
-    },
-    {
-      label: "Dataset 2",
-      data: labels.map(() => 10),
-      backgroundColor: "rgb(75, 192, 192)",
-    },
-    {
-      label: "Dataset 3",
-      data: labels.map(() => 40),
-      backgroundColor: "rgb(53, 162, 235)",
-    },
-  ],
-};
+  // {
+  //   name: "Março",
+  //   testando: 4000,
+  //   matheus: 2400,
+  //   bomestudo: 2400,
+  //   seila: 1400,
+  //   produto_25: 2400,
+  // },
+  // {
+  //   name: "Abril",
+  //   atendendo: 4000,
+  //   sorteio: 2400,
+  //   matheus: 5400,
+  //   gustavo: 2400,
+  //   seila: 3400,
+  // },
+  // {
+  //   name: "Maio",
+  //   matheus: 4000,
+  //   mosconi: 2400,
+  //   carlos: 2400,
+  //   testando: 2400,
+  //   seila: 6400,
+  // },
+  // {
+  //   name: "Junho",
+  //   nfl: 4000,
+  //   netflix: 2400,
+  //   nike: 2400,
+  //   nasa: 2400,
+  //   netshoes: 2400,
+  // },
+  // {
+  //   name: "Julho",
+  //   abc: 4000,
+  //   sss: 2400,
+  //   zuado: 1400,
+  //   nconheco: 2400,
+  //   teste: 2400,
+  // },
+];
 
 const PanoramaChart = () => {
-  return <Bar options={options} data={data} />;
+  // Extract all unique keys from the JSON data
+  const allKeys = data.reduce((keys, entry) => {
+    Object.keys(entry).forEach((key) => {
+      if (key !== "name" && !keys.includes(key)) {
+        keys.push(key);
+      }
+    });
+    return keys;
+  }, []);
+
+  console.log(allKeys);
+  return (
+    <div
+      style={{ display: "flex", marginTop: "5px", justifyContent: "center" }}
+    >
+      <BarChart
+        width={850}
+        height={320}
+        data={data}
+        margin={{
+          top: 5,
+          right: 0,
+          left: 0,
+          bottom: 0,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        {allKeys.map((key, index) => (
+          <Bar
+            key={index}
+            dataKey={key}
+            fill={`#${(((1 << 24) * Math.random()) | 0).toString(16)}`}
+          />
+        ))}
+      </BarChart>
+    </div>
+  );
 };
 
 export default PanoramaChart;

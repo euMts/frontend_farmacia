@@ -7,6 +7,8 @@ import {
   Checkbox,
   Chip,
   Container,
+  Tabs,
+  Tab,
   TextField,
   Typography,
 } from "@mui/material";
@@ -20,13 +22,22 @@ import {
 } from "./panoramaPageElements";
 import Iconify from "../iconify/Iconify";
 import PanoramaChart from "../panoramaChart/panoramaChart";
+import CustomTabPanel from "../customTabPanel/customTabPanelElement";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
 const PanoramaPage = () => {
   const [selectedOptionsMonth, setSelectedOptionsMonth] = useState([]);
   const [selectedOptionsYear, setSelectedOptionsYear] = useState([]);
+  const [value, setValue] = useState(0);
 
   const handleFilterMonth = (event, newValue) => {
     if (newValue.length <= 5) {
@@ -47,6 +58,10 @@ const PanoramaPage = () => {
 
   const handleExport = () => {
     console.log("export info");
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
   const monthOptions = [
@@ -76,7 +91,7 @@ const PanoramaPage = () => {
           padding: "35px 0 0 0",
           backgroundColor: COLORS.white,
           // overflow: "auto",
-          height: "900px",
+          height: "600px",
         }}
       >
         <Box style={{ width: "100%" }}>
@@ -167,7 +182,25 @@ const PanoramaPage = () => {
                 </Button>
               </FilterLinePanoramaRight>
             </FilterLinePanorama>
-            <PanoramaChart />
+
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }} style={{marginTop: "10px"}}>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="basic tabs"
+              >
+                <Tab label="2017" {...a11yProps(0)} />
+                <Tab label="2018" {...a11yProps(1)} />
+              </Tabs>
+            </Box>
+
+            <CustomTabPanel value={value} index={0}>
+              <PanoramaChart />
+            </CustomTabPanel>
+            
+            <CustomTabPanel value={value} index={1}>
+              <PanoramaChart />
+            </CustomTabPanel>
           </Container>
         </Box>
       </div>
