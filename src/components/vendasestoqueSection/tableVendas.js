@@ -47,7 +47,7 @@ const vendasData = [
     id: 0,
     nome: "Produto 1",
     quantidade: 3,
-    valor_unitario: "R$ 10.00",
+    valor_unitario: "R$ 10,00",
     data_venda: "29/07/2023",
     adicionado_em: "29/07/2023",
   },
@@ -55,7 +55,7 @@ const vendasData = [
     id: 1,
     nome: "Produto 2",
     quantidade: 3,
-    valor_unitario: "R$ 10.00",
+    valor_unitario: "R$ 10,00",
     data_venda: "22/07/2023",
     adicionado_em: "27/07/2023",
   },
@@ -63,7 +63,7 @@ const vendasData = [
     id: 2,
     nome: "Produto 3",
     quantidade: 6,
-    valor_unitario: "R$ 10.00",
+    valor_unitario: "R$ 10,00",
     data_venda: "19/07/2023",
     adicionado_em: "21/07/2023",
   },
@@ -71,7 +71,7 @@ const vendasData = [
     id: 3,
     nome: "Produto 4",
     quantidade: 5,
-    valor_unitario: "R$ 30.00",
+    valor_unitario: "R$ 30,00",
     data_venda: "22/07/2023",
     adicionado_em: "22/07/2023",
   },
@@ -79,7 +79,7 @@ const vendasData = [
     id: 4,
     nome: "Produto 5",
     quantidade: 3,
-    valor_unitario: "R$ 120.00",
+    valor_unitario: "R$ 120,00",
     data_venda: "23/07/2023",
     adicionado_em: "24/07/2023",
   },
@@ -87,7 +87,7 @@ const vendasData = [
     id: 5,
     nome: "Produto 1",
     quantidade: 2,
-    valor_unitario: "R$ 132.00",
+    valor_unitario: "R$ 132,00",
     data_venda: "21/07/2023",
     adicionado_em: "21/07/2023",
   },
@@ -322,8 +322,8 @@ export default function TableVendas() {
                               </Typography>
                               <Typography style={{ fontWeight: 300 }}>
                                 R${" "}
-                                {parseFloat(valor_unitario.replace("R$ ", "")) *
-                                  quantidade}
+                                {(parseFloat(valor_unitario.replace("R$ ", "")) *
+                                  quantidade).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                               </Typography>
                             </div>
                             <div

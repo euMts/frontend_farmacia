@@ -42,7 +42,7 @@ const PredicaoChart = ({ data }) => {
             dataKey={key}
             stroke={colorPalette[index % colorPalette.length]}
             strokeWidth={2}
-            strokeDasharray={index === dataKeys.length - 1 ? "5 5" : undefined}
+            strokeDasharray="1 0"
           />
         ))}
         <Line
