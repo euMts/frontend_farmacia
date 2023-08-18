@@ -10,35 +10,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  {
-    name: "Julho",
-    "Vendas de 2017": 2780,
-    "Vendas de 2018": 3908,
-  },
-  {
-    name: "Agosto",
-    "Vendas de 2017": 1890,
-    "Vendas de 2018": 4800,
-  },
-  {
-    name: "Setembro",
-    "Vendas de 2017": 2390,
-    "Vendas de 2018": 3800,
-  },
-  {
-    name: "Outubro",
-    "Vendas de 2017": 3490,
-    "Vendas de 2018": 4300,
-    Previsão: 3490,
-  },
-  {
-    name: "Novembro",
-    Previsão: 9490,
-  },
-];
+const colorPalette = ["blue", "green", "yellow", "black", "orange", "pink"];
 
-const PredicaoChart = () => {
+const PredicaoChart = ({ data }) => {
+  const dataKeys = Object.keys(data[0]).filter((key) => key !== "name");
+  console.log(dataKeys);
   return (
     <div
       style={{ display: "flex", marginTop: "30px", justifyContent: "center" }}
@@ -59,18 +35,16 @@ const PredicaoChart = () => {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line
-          type="monotone"
-          dataKey="Vendas de 2017"
-          stroke="blue"
-          strokeWidth={2}
-        />
-        <Line
-          type="monotone"
-          dataKey="Vendas de 2018"
-          stroke="green"
-          strokeWidth={2}
-        />
+        {dataKeys.map((key, index) => (
+          <Line
+            key={index}
+            type="monotone"
+            dataKey={key}
+            stroke={colorPalette[index % colorPalette.length]}
+            strokeWidth={2}
+            strokeDasharray={index === dataKeys.length - 1 ? "5 5" : undefined}
+          />
+        ))}
         <Line
           type="monotone"
           dataKey="Previsão"

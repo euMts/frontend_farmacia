@@ -36,9 +36,38 @@ const productOptions = [
 const PredicaoPage = () => {
   const [value, setValue] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [data, setData] = useState([]);
 
   const handleStart = () => {
     console.log(value);
+    console.log(data);
+    setData([
+      {
+        name: "Julho",
+        "Vendas de 2017": 2780,
+        "Vendas de 2018": 3908,
+      },
+      {
+        name: "Agosto",
+        "Vendas de 2017": 1890,
+        "Vendas de 2018": 4800,
+      },
+      {
+        name: "Setembro",
+        "Vendas de 2017": 2390,
+        "Vendas de 2018": 3800,
+      },
+      {
+        name: "Outubro",
+        "Vendas de 2017": 3490,
+        "Vendas de 2018": 4300,
+        Previsão: 3490,
+      },
+      {
+        name: "Novembro",
+        Previsão: 9490,
+      },
+    ]);
   };
 
   const handleExport = () => {
@@ -106,7 +135,13 @@ const PredicaoPage = () => {
                 </Button>
               </FilterLinePredicaoRight>
             </FilterLinePredicao>
-            <PredicaoChart />
+            {data.length > 0 ? (
+              <PredicaoChart data={data} />
+            ) : (
+              <h4 style={{ marginTop: "20px" }}>
+                Selecione um produto e inicie a predição
+              </h4>
+            )}{" "}
           </Container>
         </Box>
       </div>
