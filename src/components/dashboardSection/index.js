@@ -154,7 +154,7 @@ const DashboardPage = () => {
           <UnderInfoContainer>
             <FirstLineContainer style={{ marginBottom: "35px" }}>
               <MainSales
-                style={{ width: "600px" }}
+                style={{ width: "760px" }}
                 title="Principais vendas"
                 subheader="Produtos mais vendidos de todos os tempos"
                 chartData={dashboardData.mainSalesData}
