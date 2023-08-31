@@ -23,6 +23,7 @@ import {
 import Iconify from "../iconify/Iconify";
 import PanoramaChart from "../panoramaChart/panoramaChart";
 import CustomTabPanel from "../customTabPanel/customTabPanelElement";
+import api from "../../connection/api";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -53,76 +54,30 @@ const PanoramaPage = () => {
     }
   };
 
+  const searchApi = async (selectedOptionsMonth, selectedOptionsYear) => {
+    const requestData = {
+      months: selectedOptionsMonth,
+      years: selectedOptionsYear,
+    };
+    if (selectedOptionsMonth.length >= 1 && selectedOptionsYear.length >= 1) {
+      try {
+        const response = await api.post("/find/panorama", requestData);
+        if (response.status === 422) {
+          // alert("Usuário ou senha incorretos")
+        } else {
+          setData([response.data.data]);
+        }
+      } catch (error) {
+        alert("Erro inesperado");
+        setData(null);
+      }
+    } else {
+      setData(null);
+    }
+  };
+
   const handleSearch = () => {
-    console.log(selectedOptionsMonth);
-    console.log(selectedOptionsYear);
-    setData([
-      {
-        2018: {
-          janeiro: {
-            month: "janeiro",
-            matheus: 4000,
-            amanda: 2400,
-            joao: 2400,
-            mosconi: 2400,
-            luis: 6400,
-          },
-          fevereiro: {
-            month: "fevereiro",
-            carlos: 4000,
-            teste: 2400,
-            matheus: 6400,
-            valdir: 2400,
-            isabela: 7400,
-          },
-          março: {
-            month: "março",
-            a: 4000,
-            b: 2400,
-            c: 6400,
-            d: 2400,
-            e: 7400,
-          },
-        },
-        2019: {
-          janeiro: {
-            month: "janeiro",
-            matheus: 4000,
-            amanda: 2400,
-            joao: 2400,
-            mosconi: 2400,
-            luis: 6400,
-          },
-          fevereiro: {
-            month: "fevereiro",
-            carlos: 4000,
-            teste: 2400,
-            matheus: 6400,
-            valdir: 2400,
-            isabela: 7400,
-          },
-        },
-        2020: {
-          janeiro: {
-            month: "janeiro",
-            matheus: 4000,
-            amanda: 2400,
-            joao: 2400,
-            mosconi: 2400,
-            luis: 6400,
-          },
-          fevereiro: {
-            month: "fevereiro",
-            a: 4000,
-            b: 2400,
-            c: 2400,
-            d: 2400,
-            e: 6400,
-          },
-        },
-      },
-    ]);
-    console.log(data);
+    searchApi(selectedOptionsMonth, selectedOptionsYear);
   };
 
   useEffect(() => {
