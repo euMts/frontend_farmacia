@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { COLORS } from "../../assets/colors";
 import {
   Autocomplete,
@@ -17,26 +17,39 @@ import {
   FilterLinePredicaoRight,
 } from "./predicaoPageElements";
 import PredicaoChart from "../predicaoChart";
-
-const productOptions = [
-  "produto 1",
-  "produto 2",
-  "produto 3",
-  "produto 4",
-  "produto 5",
-  "produto 6",
-  "produto 7",
-  "produto 8",
-  "produto 9",
-  "produto 10",
-  "produto 11",
-  "produto 12",
-];
+import api from "../../connection/api";
 
 const PredicaoPage = () => {
   const [value, setValue] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [productOptions, setProductOptions] = useState([""]);
   const [data, setData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const firstSearchApi = async () => {
+    try {
+      const response = await api.get("/find/products");
+      if (response.status === 422) {
+        // alert("Usuário ou senha incorretos")
+      } else {
+        setProductOptions(response.data.uniqueProducts);
+      }
+      console.log(productOptions);
+    } catch (error) {
+      alert("Erro inesperado");
+      setProductOptions(null);
+    }
+  };
+
+  useEffect(() => {
+    firstSearchApi();
+  }, []);
+
+  const handleClear = () => {
+    setData([]);
+    setValue()
+  }
 
   const handleStart = () => {
     console.log(value);
@@ -117,6 +130,13 @@ const PredicaoPage = () => {
                     <TextField {...params} label="Produto" />
                   )}
                 />
+                <Button
+                  onClick={handleClear}
+                  variant={"outlined"}
+                  style={{ height: "56px" }}
+                >
+                  Limpar Filtros
+                </Button>
               </FilterLinePredicaoLeft>
               <FilterLinePredicaoRight>
                 <Button

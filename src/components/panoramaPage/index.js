@@ -11,6 +11,7 @@ import {
   Tab,
   TextField,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
@@ -41,6 +42,8 @@ const PanoramaPage = () => {
   const [value, setValue] = useState(0);
   const [data, setData] = useState();
   const [tabLabels, setTabLabels] = useState();
+  const [errorMessage, setErrorMessage] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFilterMonth = (event, newValue) => {
     if (newValue.length <= 5) {
@@ -59,12 +62,15 @@ const PanoramaPage = () => {
       months: selectedOptionsMonth,
       years: selectedOptionsYear,
     };
+    setErrorMessage();
     if (selectedOptionsMonth.length >= 1 && selectedOptionsYear.length >= 1) {
       try {
+        setIsLoading(true);
         const response = await api.post("/find/panorama", requestData);
         if (response.status === 422) {
           // alert("Usuário ou senha incorretos")
         } else {
+          setIsLoading(false);
           setData([response.data.data]);
         }
       } catch (error) {
@@ -73,11 +79,19 @@ const PanoramaPage = () => {
       }
     } else {
       setData(null);
+      setErrorMessage("Preencha os filtros.");
     }
   };
 
   const handleSearch = () => {
     searchApi(selectedOptionsMonth, selectedOptionsYear);
+  };
+
+  const handleClear = () => {
+    setData(null);
+    setSelectedOptionsMonth([]);
+    setSelectedOptionsYear([]);
+    setErrorMessage();
   };
 
   useEffect(() => {
@@ -177,7 +191,11 @@ const PanoramaPage = () => {
                   multiple
                   limitTags={1}
                   disableCloseOnSelect
-                  style={{ minWidth: 180, maxWidth: "350px" }}
+                  style={{
+                    minWidth: 180,
+                    maxWidth: "350px",
+                    marginRight: "15px",
+                  }}
                   id="select-ano-id"
                   options={yearOptions}
                   onChange={handleFilterYear}
@@ -198,6 +216,13 @@ const PanoramaPage = () => {
                     <TextField {...params} label="Ano" placeholder="" />
                   )}
                 />
+                <Button
+                  onClick={handleClear}
+                  variant={"outlined"}
+                  style={{ height: "56px" }}
+                >
+                  Limpar Filtros
+                </Button>
               </FilterLinePanoramaLeft>
               <FilterLinePanoramaRight>
                 <Button
@@ -244,7 +269,11 @@ const PanoramaPage = () => {
                 </CustomTabPanel> */}
                 {tabLabels.map((label, index) => (
                   <CustomTabPanel key={index} value={value} index={index}>
-                    <PanoramaChart data={data[0][label]} />
+                    {data[0][label] ? (
+                      <PanoramaChart data={data[0][label]} />
+                    ) : (
+                      <></>
+                    )}
                   </CustomTabPanel>
                 ))}
               </>
@@ -253,6 +282,26 @@ const PanoramaPage = () => {
                 Selecione um período e inicie a busca
               </h4>
             )}{" "}
+            {errorMessage ? (
+              <h4 style={{ marginTop: "20px", color: "red" }}>
+                {errorMessage}
+              </h4>
+            ) : (
+              <></>
+            )}
+            {isLoading ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  marginLeft: "500px",
+                  marginTop: "150px",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            ) : (
+              <></>
+            )}
           </Container>
         </Box>
       </div>

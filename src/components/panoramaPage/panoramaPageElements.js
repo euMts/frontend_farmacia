@@ -14,7 +14,7 @@ export const FilterLinePanoramaLeft = styled.div`
   align-items: center;
   /* background-color: red; */
   min-width: 390px;
-  max-width: 550px;
+  max-width: 750px;
   /* width: 300px; */
   /* background-color: red */
 `;
