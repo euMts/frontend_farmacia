@@ -39,7 +39,7 @@ const PredicaoPage = () => {
         console.log(productOptions);
       } catch (error) {
         alert("Erro inesperado");
-        setProductOptions(null);
+        setProductOptions("");
         setErrorMessage();
       }
   };
@@ -58,6 +58,7 @@ const PredicaoPage = () => {
       product: inputValue,
     };
     setErrorMessage();
+    console.log(inputValue, "samns")
     if (inputValue.length >= 1) {
       try {
         setIsLoading(true);
@@ -66,47 +67,50 @@ const PredicaoPage = () => {
           // alert("Usuário ou senha incorretos")
         } else {
           setIsLoading(false);
-          setData([response.data.data]);
+          setData(response.data.data);
         }
       } catch (error) {
         alert("Erro inesperado");
-        setData(null);
+        setData([]);
       }
     } else {
-      setData(null);
+      setData([]);
       setErrorMessage("Preencha os filtros.");
     }
   };
 
   const handleStart = () => {
-    // searchApi(inputValue)
+    searchApi(inputValue)
     console.log(value);
     console.log(data);
-    setData([
-      {
-        name: "Julho",
-        "Vendas de 2017": 2780,
-        "Vendas de 2018": 3908,
-      },
-      {
-        name: "Agosto",
-        "Vendas de 2017": 1890,
-        "Vendas de 2018": 4800,
-      },
-      {
-        name: "Setembro",
-        "Vendas de 2017": 2390,
-        "Vendas de 2018": 3800,
-      },
-      {
-        name: "Outubro",
-        "Vendas de 2017": 3490,
-        "Vendas de 2018": 4300,
-      },
-      {
-        name: "Novembro",
-      },
-    ]);
+    // setData([
+    //   {
+    //     "name": "Julho",
+    //     "Vendas de 2017": 2780,
+    //     "Vendas de 2018": 3908
+    //   },
+    //   {
+    //     "name": "Agosto",
+    //     "Vendas de 2017": 1890,
+    //     "Vendas de 2018": 4800
+    //   },
+    //   {
+    //     "name": "Setembro",
+    //     "Vendas de 2017": 2390,
+    //     "Vendas de 2018": 3800
+    //   },
+    //   {
+    //     "name": "Outubro",
+    //     "Vendas de 2017": 3490,
+    //     "Vendas de 2018": 4300,
+    //     "Previsão": 3490
+    //   },
+    //   {
+    //     "name": "Novembro",
+    //     "Previsão": 9490
+    //   }
+    // ]
+    // );
   };
 
   const handleExport = () => {

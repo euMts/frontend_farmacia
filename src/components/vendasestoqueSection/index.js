@@ -36,6 +36,7 @@ import ExpandableTableRow from "./user/expandableTableRow";
 import CustomTabPanel from "../customTabPanel/customTabPanelElement";
 import TableVendas from "./tableVendas";
 import TableEstoque from "./tableEstoque";
+import api from "../../connection/api";
 
 dayjs.locale("pt-br");
 
@@ -91,11 +92,27 @@ export default function VendasestoquePage() {
     // 👇️ can still access file object here
     // console.log(fileObj);
     // console.log(fileObj.name);
-    
-    if(event.target.id === "receberVenda"){
-      console.log("receber venda")
-    } else if(event.target.id === "receberEstoque"){
-      console.log("receber estoque")
+
+    if (event.target.id === "receberVenda") {
+      console.log("receber venda");
+      
+    } else if (event.target.id === "receberEstoque") {
+      const formData = new FormData();
+      formData.append("file", fileObj);
+      try {
+        // setIsLoading(true);
+        const response = api.post("/file/csv/estoque", formData);
+        if (response.status === 422) {
+          // alert("Usuário ou senha incorretos")
+        } else {
+          // setData(response.data.data);
+          alert("certinho")
+        }
+      } catch (error) {
+        alert("Erro inesperado");
+        // setData([]);
+      }
+      console.log("receber estoque");
     }
   };
 
