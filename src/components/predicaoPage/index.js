@@ -28,18 +28,20 @@ const PredicaoPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const firstSearchApi = async () => {
-    try {
-      const response = await api.get("/find/products");
-      if (response.status === 422) {
-        // alert("Usuário ou senha incorretos")
-      } else {
-        setProductOptions(response.data.uniqueProducts);
+    setErrorMessage("");
+      try {
+        const response = await api.get("/find/products");
+        if (response.status === 422) {
+          // alert("Usuário ou senha incorretos")
+        } else {
+          setProductOptions(response.data.uniqueProducts);
+        }
+        console.log(productOptions);
+      } catch (error) {
+        alert("Erro inesperado");
+        setProductOptions(null);
+        setErrorMessage();
       }
-      console.log(productOptions);
-    } catch (error) {
-      alert("Erro inesperado");
-      setProductOptions(null);
-    }
   };
 
   useEffect(() => {
@@ -48,10 +50,36 @@ const PredicaoPage = () => {
 
   const handleClear = () => {
     setData([]);
-    setValue()
-  }
+    setValue();
+  };
+
+  const searchApi = async (inputValue) => {
+    const requestData = {
+      product: inputValue,
+    };
+    setErrorMessage();
+    if (inputValue.length >= 1) {
+      try {
+        setIsLoading(true);
+        const response = await api.post("/find/predicao", requestData);
+        if (response.status === 422) {
+          // alert("Usuário ou senha incorretos")
+        } else {
+          setIsLoading(false);
+          setData([response.data.data]);
+        }
+      } catch (error) {
+        alert("Erro inesperado");
+        setData(null);
+      }
+    } else {
+      setData(null);
+      setErrorMessage("Preencha os filtros.");
+    }
+  };
 
   const handleStart = () => {
+    // searchApi(inputValue)
     console.log(value);
     console.log(data);
     setData([
@@ -74,11 +102,9 @@ const PredicaoPage = () => {
         name: "Outubro",
         "Vendas de 2017": 3490,
         "Vendas de 2018": 4300,
-        Previsão: 3490,
       },
       {
         name: "Novembro",
-        Previsão: 9490,
       },
     ]);
   };
@@ -161,7 +187,14 @@ const PredicaoPage = () => {
               <h4 style={{ marginTop: "20px" }}>
                 Selecione um produto e inicie a predição
               </h4>
-            )}{" "}
+            )}
+            {errorMessage ? (
+              <h4 style={{ marginTop: "20px", color: "red" }}>
+                {errorMessage}
+              </h4>
+            ) : (
+              <></>
+            )}
           </Container>
         </Box>
       </div>

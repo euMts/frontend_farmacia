@@ -21,6 +21,7 @@ import MainSales from "./MainSalesElements";
 import { BsCart4 } from "react-icons/bs";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Icon } from "@iconify/react";
+import api from "../../connection/api";
 
 const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -33,60 +34,67 @@ const DashboardPage = () => {
     });
   };
 
+  const firstSearchApi = async () => {
+    try {
+      const response = await api.get("/find/dashboard");
+      if (response.status === 422) {
+        // alert("Usuário ou senha incorretos")
+      } else {
+        setDashboardData(response.data);
+        console.log(dashboardData)
+      }
+      setIsLoading(false)
+    } catch (error) {
+      alert("Erro inesperado");
+      setDashboardData(null);
+    }
+  };
+
   useEffect(() => {
-    setDashboardData({
-      historyData: [
-        {
-          id: "0",
-          title: "20 Registros",
-          time: "2023-05-18 02:29",
-        },
-        {
-          id: "1",
-          title: "12 Registros",
-          time: "2023-05-18 02:19",
-        },
-        {
-          id: "2",
-          title: "10 Registros",
-          time: "2023-05-18 01:29",
-        },
-        {
-          id: "3",
-          title: "120 Registros",
-          time: "2023-05-18 00:29",
-        },
-      ],
-      mainSalesData: [
-        { label: "NomeProduto1", value: 400 },
-        { label: "NomeProduto2", value: 430 },
-        { label: "NomeProduto3", value: 448 },
-        { label: "NomeProduto4", value: 470 },
-        { label: "NomeProduto5", value: 540 },
-        { label: "NomeProduto6", value: 580 },
-        { label: "NomeProduto7", value: 690 },
-        { label: "NomeProduto8", value: 1100 },
-        { label: "NomeProduto9", value: 1200 },
-        { label: "NomeProduto10", value: 1380 },
-      ],
-    });
-    setIsLoading(false);
+    firstSearchApi();
   }, []);
 
-  return isLoading ? (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Box sx={{ display: "flex", marginTop: "100px" }}>
-        <CircularProgress />
-      </Box>
-    </div>
-  ) : (
+  // useEffect(() => {
+  //   setDashboardData({
+  //     historyData: [
+  //       {
+  //         id: "0",
+  //         title: "20 Registros",
+  //         time: "2023-05-18 02:29",
+  //       },
+  //       {
+  //         id: "1",
+  //         title: "12 Registros",
+  //         time: "2023-05-18 02:19",
+  //       },
+  //       {
+  //         id: "2",
+  //         title: "10 Registros",
+  //         time: "2023-05-18 01:29",
+  //       },
+  //       {
+  //         id: "3",
+  //         title: "120 Registros",
+  //         time: "2023-05-18 00:29",
+  //       },
+  //     ],
+  //     mainSalesData: [
+  //       { label: "NomeProduto1", value: 400 },
+  //       { label: "NomeProduto2", value: 430 },
+  //       { label: "NomeProduto3", value: 448 },
+  //       { label: "NomeProduto4", value: 470 },
+  //       { label: "NomeProduto5", value: 540 },
+  //       { label: "NomeProduto6", value: 580 },
+  //       { label: "NomeProduto7", value: 690 },
+  //       { label: "NomeProduto8", value: 1100 },
+  //       { label: "NomeProduto9", value: 1200 },
+  //       { label: "NomeProduto10", value: 1380 },
+  //     ],
+  //   });
+  //   // setIsLoading(false);
+  // }, []);
+
+  return (
     <>
       <DashboardContainer>
         <DashboardWrapper style={{ padding: "35px" }}>
@@ -105,7 +113,7 @@ const DashboardPage = () => {
 
               <Grid item xs={12} sm={6} md={3}>
                 <CardsWidget
-                pagePath="..//panorama"
+                  pagePath="..//panorama"
                   title1="Panorama"
                   title2="Identificar o produto mais vendido em determinada época"
                   color="#04297A"
@@ -121,7 +129,7 @@ const DashboardPage = () => {
 
               <Grid item xs={12} sm={6} md={3}>
                 <CardsWidget
-                pagePath="..//historico"
+                  pagePath="..//historico"
                   title1="Histórico"
                   title2="Buscar pela data a qual foram adicionadas informações no sistema"
                   color="#04297A"
@@ -136,7 +144,7 @@ const DashboardPage = () => {
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <CardsWidget
-                pagePath="..//predicao"
+                  pagePath="..//predicao"
                   title1="Predição"
                   title2="Analisar dados para obter uma estimativa de vendas futuras"
                   color="#08660D"
@@ -153,22 +161,37 @@ const DashboardPage = () => {
           </ItemsContainer>
           <UnderInfoContainer>
             <FirstLineContainer style={{ marginBottom: "35px" }}>
-              <MainSales
-                style={{ width: "760px" }}
-                title="Principais vendas"
-                subheader="Produtos mais vendidos de todos os tempos"
-                chartData={dashboardData.mainSalesData}
-              />
+              {isLoading ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    marginTop: "40px",
+                    marginLeft: "500px",
+                    marginBottom: "150px",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <>
+                  <MainSales
+                    style={{ width: "760px" }}
+                    title="Principais vendas"
+                    subheader="Produtos mais vendidos de todos os tempos"
+                    chartData={dashboardData.mainSalesData}
+                  />
 
-              <History
-                style={{
-                  width: "300px",
-                  // height: "90%",
-                }}
-                title="Resumo histórico"
-                subheader={"Movimentações de vendas"}
-                list={dashboardData.historyData}
-              />
+                  <History
+                    style={{
+                      width: "300px",
+                      // height: "90%",
+                    }}
+                    title="Resumo histórico"
+                    subheader={"Movimentações de vendas"}
+                    list={dashboardData.historyData}
+                  />
+                </>
+              )}
             </FirstLineContainer>
 
             <ThirdLineContainer>
@@ -191,6 +214,7 @@ const DashboardPage = () => {
       </DashboardContainer>
     </>
   );
+  // );
 };
 
 export default DashboardPage;
