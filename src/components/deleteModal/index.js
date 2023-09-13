@@ -24,15 +24,16 @@ export default function DeleteModal({
   const deleteApi = async (idProduto) => {
     console.log(`deletando produto de ID ${idProduto}`)
     try {
-      const response = await api.delete(`/produto/${idProduto}`);
+      const response = await api.delete(`/find/vendas/${idProduto}`);
       if (response.status === 200) {
-        setProductDeletedAlert(true);
+        // setProductDeletedAlert(true);
         handleDeleteModalClose();
       } else {
-        setProductNotDeletedAlert(true);
+        // setProductNotDeletedAlert(true);
       }
     } catch (error) {
-      setProductNotDeletedAlert(true);
+      console.log(error)
+      // setProductNotDeletedAlert(true);
     }
   };
 

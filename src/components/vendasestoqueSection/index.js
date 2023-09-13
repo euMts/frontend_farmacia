@@ -106,7 +106,7 @@ export default function VendasestoquePage() {
           // alert("Usuário ou senha incorretos")
         } else {
           // setData(response.data.data);
-          alert("certinho")
+          console.log("deu certo")
         }
       } catch (error) {
         alert("Erro inesperado");

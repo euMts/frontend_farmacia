@@ -48,78 +48,94 @@ const LoginPage = () => {
       <>
         <LoginContainer>
           <LoginWrapper>
-            <LoginTitle>Entrar em NOME_DO_SISTEMA</LoginTitle>
-            <LoginSubTitle>
+            <LoginTitle style={{ marginBottom: "20px" }}>
+              Bem vindo ao Varejo Farma!
+            </LoginTitle>
+            {/* <LoginSubTitle>
               Não tem uma conta?{" "}
               <Link style={{ cursor: "pointer" }}>Cadastre-se</Link>
-            </LoginSubTitle>
+            </LoginSubTitle> */}
 
-            <Divider sx={{ my: 2 }}>
+            {/* <Divider sx={{ my: 2 }}>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 OU
               </Typography>
-            </Divider>
-            <Stack spacing={3}>
-              <TextField
-                name="email"
-                label="Endereço de E-mail"
-                value={email}
-                onChange={(e) => [setEmail(e.target.value), setEmailError("")]}
-                error={!!emailError}
-              />
-              <TextField
-                name="password"
-                label="Senha"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => [
-                  setPassword(e.target.value),
-                  setPasswordError(""),
-                ]}
-                error={!!passwordError}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
-                        edge="end"
-                      >
-                        {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Stack>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="center"
-              sx={{ my: 2 }}
-            >
-              <Link
-                variant="subtitle2"
-                underline="hover"
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate("/recovery")}
+            </Divider> */}
+            <form autocomplete="on">
+              <Stack spacing={3}>
+                <TextField
+                  name="email"
+                  label="Endereço de E-mail"
+                  id="email"
+                  value={email}
+                  onChange={(e) => [
+                    setEmail(e.target.value),
+                    setEmailError(""),
+                  ]}
+                  error={!!emailError}
+                  tabIndex={1}
+                />
+                <TextField
+                  name="password"
+                  label="Senha"
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => [
+                    setPassword(e.target.value),
+                    setPasswordError(""),
+                  ]}
+                  error={!!passwordError}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          {showPassword ? (
+                            <AiFillEye />
+                          ) : (
+                            <AiFillEyeInvisible />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  tabIndex={2}
+                />
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+                sx={{ my: 2 }}
               >
-                Esqueceu a senha?
-              </Link>
-            </Stack>
+                <Link
+                  variant="subtitle2"
+                  underline="hover"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate("/recovery")}
+                >
+                  Esqueceu a senha?
+                </Link>
+              </Stack>
 
-            <LabelError>{emailError}</LabelError>
-            <LabelError>{passwordError}</LabelError>
+              <LabelError>{emailError}</LabelError>
+              <LabelError>{passwordError}</LabelError>
 
-            <LoadingButton
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-              color="primary"
-              onClick={handleClick}
-            >
-              Entrar
-            </LoadingButton>
+              <LoadingButton
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                color="primary"
+                onClick={handleClick}
+                tabIndex={3}
+              >
+                Entrar
+              </LoadingButton>
+            </form>
           </LoginWrapper>
         </LoginContainer>
       </>

@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import Dashboard from "../pages/dashboard";
 import Login from "../pages/login";
+import Logout from "../pages/login";
 import { PrivateRoute } from "./privateRoutes";
 import ForgotPassword from "../pages/forgotPassword";
 import Vendasestoque from "../pages/vendasestoque";

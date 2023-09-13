@@ -55,7 +55,7 @@ export default function EditVendaModal({
     console.log(`novo valor unitario ${newProductValue}`);
     console.log(`nova data venda ${newProductDate}`);
     try {
-      const response = await api.patch(`/produto/${idProduto}`);
+      const response = await api.put(`/find/vendas/${idProduto}`);
       if (response.status === 200) {
         setProductEditedAlert(true);
         handleEditModalClose();

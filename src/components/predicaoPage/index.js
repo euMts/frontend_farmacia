@@ -36,7 +36,7 @@ const PredicaoPage = () => {
         } else {
           setProductOptions(response.data.uniqueProducts);
         }
-        console.log(productOptions);
+        // console.log(productOptions);
       } catch (error) {
         alert("Erro inesperado");
         setProductOptions("");
@@ -58,7 +58,7 @@ const PredicaoPage = () => {
       product: inputValue,
     };
     setErrorMessage();
-    console.log(inputValue, "samns")
+    // console.log(inputValue, "samns")
     if (inputValue.length >= 1) {
       try {
         setIsLoading(true);
@@ -81,8 +81,8 @@ const PredicaoPage = () => {
 
   const handleStart = () => {
     searchApi(inputValue)
-    console.log(value);
-    console.log(data);
+    // console.log(value);
+    // console.log(data);
     // setData([
     //   {
     //     "name": "Julho",

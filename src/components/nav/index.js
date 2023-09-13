@@ -11,6 +11,7 @@ import {
   Typography,
   Avatar,
   Stack,
+  IconButton,
 } from "@mui/material";
 // mock
 import account from "../_mock/account";
@@ -23,7 +24,11 @@ import NavSection from "../nav-section";
 //
 import navConfig from "./config";
 import { COLORS } from "../../assets/colors";
-
+import api from "../../connection/api";
+import { useState } from "react";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { AuthContext } from "../../contexts/auth";
+import { useContext } from "react";
 // ----------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
@@ -45,6 +50,11 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav }) {
   const { pathname } = useLocation();
+  const { signOut } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    signOut()
+  }
 
   const isDesktop = useResponsive("up", "lg");
 
@@ -87,16 +97,26 @@ export default function Nav({ openNav, onCloseNav }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <Avatar src={localStorage.getItem("profile_pic_url")} alt="photoURL" />
 
-            <Box sx={{ ml: 2 }}>
+            <Box sx={{ ml: 2, display: "flex" }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                {account.displayName}
+                {localStorage.getItem("username")}
               </Typography>
-
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {account.role}
-              </Typography>
+              <IconButton
+                style={{ padding: 0, marginLeft: "80%",backgroundColor: 'transparent' }}
+                aria-label="Logout"
+                title="Logout"
+                onClick={handleLogout}
+              >
+                <LogoutIcon
+                  style={{
+                    fontSize: "20px",
+                    color: "rgba(0,0,0,0.6)",
+                    cursor: "pointer",
+                  }}
+                />
+              </IconButton>
             </Box>
           </StyledAccount>
         </Link>
@@ -150,19 +170,21 @@ export default function Nav({ openNav, onCloseNav }) {
       }}
     >
       {isDesktop ? (
-        <Drawer
-          open
-          variant="permanent"
-          PaperProps={{
-            sx: {
-              width: NAV_WIDTH,
-              bgcolor: COLORS.white,
-              borderRightStyle: "dashed",
-            },
-          }}
-        >
-          {renderContent}
-        </Drawer>
+        <>
+          <Drawer
+            open
+            variant="permanent"
+            PaperProps={{
+              sx: {
+                width: NAV_WIDTH,
+                bgcolor: COLORS.white,
+                borderRightStyle: "dashed",
+              },
+            }}
+          >
+            {renderContent}
+          </Drawer>
+        </>
       ) : (
         <Drawer
           open={openNav}
