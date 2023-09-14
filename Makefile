@@ -1,4 +1,4 @@
 commit:
 	git add .
-	git commit -m "updated files $$(date +'%d-%m-%Y %H:%M')"
+	git commit -m "updated files from Makefile"
 	git push

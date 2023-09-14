@@ -22,6 +22,9 @@ import {
   TextField,
   Tabs,
   Tab,
+  Alert,
+  Snackbar,
+  CircularProgress,
 } from "@mui/material";
 import Label from "../label";
 import Iconify from "../iconify/Iconify";
@@ -67,6 +70,16 @@ export default function VendasestoquePage() {
   const [value, setValue] = useState(0);
   const [vendaMenuOpen, setVendaMenuOpen] = useState(null);
   const [estoqueMenuOpen, setEstoqueMenuOpen] = useState(null);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCloseAlert = () => {
+    setIsAlertOpen(false);
+    setAlertMessage("");
+    setAlertSeverity("success");
+  };
 
   const inputRef = useRef(null);
 
@@ -94,25 +107,76 @@ export default function VendasestoquePage() {
     // console.log(fileObj.name);
 
     if (event.target.id === "receberVenda") {
-      console.log("receber venda");
-      
-    } else if (event.target.id === "receberEstoque") {
-      const formData = new FormData();
-      formData.append("file", fileObj);
+      const vendaFormData = new FormData();
+      vendaFormData.append("file", fileObj);
+
+      setIsLoading(true);
+
       try {
-        // setIsLoading(true);
-        const response = api.post("/file/csv/estoque", formData);
-        if (response.status === 422) {
-          // alert("Usuário ou senha incorretos")
-        } else {
-          // setData(response.data.data);
-          console.log("deu certo")
-        }
+        api
+          .post("/file/csv/venda", vendaFormData)
+          .then((response) => {
+            console.log(response.status);
+            if (response.status !== 200) {
+              setAlertSeverity("error");
+              setAlertMessage("Erro interno");
+              setIsAlertOpen(true);
+            } else if (response.status === 200) {
+              // setData(response.data.data);
+              setAlertSeverity("success");
+              setAlertMessage("Arquivo recebido! Reinicie a página.");
+              setIsAlertOpen(true);
+            }
+            setIsLoading(false); // Move o setIsLoading(false) para dentro do bloco .then()
+          })
+          .catch((error) => {
+            setAlertSeverity("error");
+            setAlertMessage("Erro interno");
+            setIsAlertOpen(true);
+            setIsLoading(false); // Também pode ser colocado dentro do bloco .catch()
+          });
       } catch (error) {
-        alert("Erro inesperado");
-        // setData([]);
+        setAlertSeverity("error");
+        setAlertMessage("Erro interno");
+        setIsAlertOpen(true);
+        setIsLoading(false); // Também pode ser colocado dentro do bloco catch
       }
-      console.log("receber estoque");
+    } else if (event.target.id === "receberEstoque") {
+      const estoqueFormData = new FormData();
+      estoqueFormData.append("file", fileObj);
+
+      setIsLoading(true);
+
+      try {
+        api
+          .post("/file/csv/estoque", estoqueFormData)
+          .then((response) => {
+            console.log(response.status);
+            if (response.status !== 200) {
+              setAlertSeverity("error");
+              setAlertMessage("Erro interno");
+              setIsAlertOpen(true);
+            } else if (response.status === 200) {
+              setAlertSeverity("success");
+              setAlertMessage("Arquivo recebido! Reinicie a página.");
+              setIsAlertOpen(true);
+            }
+            setIsLoading(false); // Parar de exibir o indicador de carregamento
+          })
+          .catch((error) => {
+            // alert("Erro inesperado");
+            setAlertSeverity("error");
+            setAlertMessage("Erro interno");
+            setIsAlertOpen(true);
+            setIsLoading(false); // Parar de exibir o indicador de carregamento em caso de erro
+          });
+      } catch (error) {
+        // alert("Erro inesperado");
+        setAlertSeverity("error");
+        setAlertMessage("Erro interno");
+        setIsAlertOpen(true);
+        setIsLoading(false); // Parar de exibir o indicador de carregamento em caso de erro
+      }
     }
   };
 
@@ -138,6 +202,19 @@ export default function VendasestoquePage() {
 
   return (
     <>
+      <Snackbar
+        open={isAlertOpen}
+        autoHideDuration={10000}
+        onClose={handleCloseAlert}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alertSeverity}
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <div
         style={{
           display: "flex",
@@ -202,7 +279,20 @@ export default function VendasestoquePage() {
               </Stack>
 
               <Card>
-                <TableVendas />
+                {isLoading ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      marginTop: "40px",
+                      marginLeft: "500px",
+                      marginBottom: "150px",
+                    }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  <TableVendas />
+                )}
               </Card>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
@@ -239,7 +329,20 @@ export default function VendasestoquePage() {
               </Stack>
 
               <Card>
-                <TableEstoque />
+                {isLoading ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      marginTop: "40px",
+                      marginLeft: "500px",
+                      marginBottom: "150px",
+                    }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  <TableEstoque />
+                )}
               </Card>
             </CustomTabPanel>
           </Container>
