@@ -7,6 +7,7 @@ import Nav from "../components/nav";
 export const PrivateRoute = () => {
   const { signed } = useContext(AuthContext);
   
+  console.log(signed)
 
   return signed ? ( // remover '!' para deploy.
     <div style={{ display: "flex" }}>
