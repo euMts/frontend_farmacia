@@ -10,6 +10,17 @@ const theme = createTheme({
       "sans-serif",
     ].join(","),
   },
+  components:{
+    MuiOutlinedInput:{
+      styleOverrides:{
+        root:{
+          '& > .MuiChip-root:not(:first-child)':{
+            display:'none'
+          }
+        }
+      }
+    }
+  }
 });
 
 function App() {

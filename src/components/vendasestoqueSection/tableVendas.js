@@ -94,6 +94,29 @@ const TABLE_HEAD = [
 //   },
 // ];
 
+const filtroOptions = [
+  {
+    value: "nome",
+    label: "Nome",
+  },
+  {
+    value: "quantidade",
+    label: "Quantidade",
+  },
+  {
+    value: "valor_unitario",
+    label: "Valor Unitário",
+  },
+  {
+    value: "data_venda",
+    label: "Data da Venda",
+  },
+  {
+    value: "created_at",
+    label: "Adicionado em",
+  },
+];
+
 export default function TableVendas() {
   const [vendasData, setVendasData] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
@@ -134,6 +157,8 @@ export default function TableVendas() {
   const handleCloseMenu = () => {
     setOpen(null);
   };
+  const [filter, setFilter] = useState("");
+  const [filterOrder, setFilterOrder] = useState("");
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -185,15 +210,56 @@ export default function TableVendas() {
   };
 
   const handleSearchProduct = () => {
-    console.log(filterProduct)
-  }
+    console.log(filterProduct);
+    console.log(filter)
+    console.log(filterOrder)
+    const apiEndpoint = `/find/vendas/pagination?page=${1}&per_page=${rowsPerPage}&product_name=${filterProduct}`;
+
+    const response = api
+      .get(apiEndpoint, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((data) => {
+        setVendasData(data.data.vendas.vendas);
+        console.log(data.data.vendas.vendas);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
 
   const clearFilterProduct = () => {
     setFilterProduct("");
+    const apiEndpoint = `/find/vendas/pagination?page=${1}&per_page=${rowsPerPage}`;
+
+    const response = api
+      .get(apiEndpoint, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((data) => {
+        setVendasData(data.data.vendas.vendas);
+        console.log(data.data.vendas.vendas);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
 
   const handleClearFilters = () => {
     clearFilterProduct();
+    setFilter("");
+    setFilterOrder("");
+  };
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+  const handleOrderChange = (event) => {
+    setFilterOrder(event.target.value);
   };
 
   const isNotFound = !vendasData.length && !!vendasData;
@@ -244,6 +310,40 @@ export default function TableVendas() {
             // style={{ minWidth: 180, maxWidth: "100%" }}
             label="Produto"
           />
+          <TextField
+            id="outlined-select-filter"
+            select
+            displayEmpty
+            label="Filtro"
+            onChange={handleFilterChange}
+            value={filter}
+            style={{ marginLeft: "20px", height: "56px", minWidth: "160px" }}
+          >
+            <MenuItem key="empty" value="">
+              {/* Empty option for clearing */}
+            </MenuItem>
+            {filtroOptions.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="outlined-select-order"
+            select
+            displayEmpty
+            onChange={handleOrderChange}
+            value={filterOrder}
+            label="Ordem"
+            style={{ marginLeft: "20px", height: "56px", minWidth: "120px" }}
+          >
+            <MenuItem key={"asc"} value={"asc"}>
+              {"Menor > maior"}
+            </MenuItem>
+            <MenuItem key={"desc"} value={"desc"}>
+              {"Maior > menor"}
+            </MenuItem>
+          </TextField>
           <Button
             onClick={handleSearchProduct}
             variant={"outlined"}
@@ -251,15 +351,14 @@ export default function TableVendas() {
           >
             Buscar
           </Button>
+          <Button
+            onClick={handleClearFilters}
+            variant={"outlined"}
+            style={{ height: "56px", marginLeft: "20px" }}
+          >
+            Limpar Filtros
+          </Button>
         </div>
-
-        <Button
-          onClick={handleClearFilters}
-          variant={"outlined"}
-          style={{ height: "56px" }}
-        >
-          Limpar Filtros
-        </Button>
       </div>
       <Scrollbar>
         <TableContainer sx={{ minWidth: 800 }}>
@@ -308,8 +407,11 @@ export default function TableVendas() {
                             <Typography style={{ fontWeight: 300 }}>
                               R${" "}
                               {(
-                                parseFloat(valor_unitario.replace("R$ ", "")) *
-                                quantidade
+                                parseFloat(
+                                  valor_unitario
+                                    .replace("R$ ", "")
+                                    .replace(",", ".")
+                                ) * quantidade
                               ).toLocaleString("pt-BR", {
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,

@@ -159,6 +159,7 @@ const PanoramaPage = () => {
                 <Autocomplete
                   value={selectedOptionsMonth}
                   multiple
+                  
                   limitTags={1}
                   disableCloseOnSelect
                   style={{
