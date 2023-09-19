@@ -31,9 +31,6 @@ import DeleteModal from "../deleteModal";
 import EditVendaModal from "../editVendaModal";
 import api from "../../connection/api";
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
 const TABLE_HEAD = [
   { id: "spacing", label: "", alignDirection: "center" },
   { id: "nome", label: "Nome", alignDirection: "center" },
@@ -123,9 +120,6 @@ export default function TableVendas() {
   const [totalItemsNames, setTotalItemsNames] = useState([0]);
   const [totalPages, setTotalPages] = useState(0);
   const [open, setOpen] = useState(null);
-  const [page, setPage] = useState(0);
-  const [filterProduct, setFilterProduct] = useState("");
-  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [idProdutoAtual, setIdProdutoAtual] = useState(null);
   const [nomeProdutoAtual, setNomeProdutoAtual] = useState("");
   const [adicionadoEmAtual, setAdicionadoEmAtual] = useState("");
@@ -157,6 +151,10 @@ export default function TableVendas() {
   const handleCloseMenu = () => {
     setOpen(null);
   };
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [filterProduct, setFilterProduct] = useState("");
   const [filter, setFilter] = useState("");
   const [filterOrder, setFilterOrder] = useState("");
 
@@ -179,7 +177,7 @@ export default function TableVendas() {
   const handleChangePage = async (event, newPage) => {
     const apiEndpoint = `/find/vendas/pagination?page=${
       newPage + 1
-    }&per_page=${rowsPerPage}`;
+    }&per_page=${rowsPerPage}&product_name=${filterProduct}&filter_column=${filter}&order=${filterOrder}`;
 
     try {
       const response = await api.get(apiEndpoint, {
@@ -200,20 +198,12 @@ export default function TableVendas() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setPage(0);
+    // setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
-  };
-
-  const handleFilterByProduct = (event) => {
     setPage(0);
-    setFilterProduct(event.target.value);
-  };
-
-  const handleSearchProduct = () => {
-    console.log(filterProduct);
-    console.log(filter)
-    console.log(filterOrder)
-    const apiEndpoint = `/find/vendas/pagination?page=${1}&per_page=${rowsPerPage}&product_name=${filterProduct}`;
+    const apiEndpoint = `/find/vendas/pagination?page=${1}&per_page=${
+      event.target.value
+    }&product_name=${filterProduct}&filter_column=${filter}&order=${filterOrder}`;
 
     const response = api
       .get(apiEndpoint, {
@@ -223,7 +213,29 @@ export default function TableVendas() {
       })
       .then((data) => {
         setVendasData(data.data.vendas.vendas);
-        console.log(data.data.vendas.vendas);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
+  const handleFilterByProduct = (event) => {
+    // setPage(0);
+    setFilterProduct(event.target.value);
+  };
+
+  const handleSearchProduct = () => {
+    setPage(0);
+    const apiEndpoint = `/find/vendas/pagination?page=${1}&per_page=${rowsPerPage}&product_name=${filterProduct}&filter_column=${filter}&order=${filterOrder}`;
+
+    const response = api
+      .get(apiEndpoint, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((data) => {
+        setVendasData(data.data.vendas.vendas);
       })
       .catch((error) => {
         console.log("error", error);
@@ -231,8 +243,7 @@ export default function TableVendas() {
   };
 
   const clearFilterProduct = () => {
-    setFilterProduct("");
-    const apiEndpoint = `/find/vendas/pagination?page=${1}&per_page=${rowsPerPage}`;
+    const apiEndpoint = `/find/vendas/pagination?page=${1}&per_page=${rowsPerPage}&product_name=${""}&filter_column=${""}&order=${""}`;
 
     const response = api
       .get(apiEndpoint, {
@@ -242,7 +253,6 @@ export default function TableVendas() {
       })
       .then((data) => {
         setVendasData(data.data.vendas.vendas);
-        console.log(data.data.vendas.vendas);
       })
       .catch((error) => {
         console.log("error", error);
@@ -250,9 +260,10 @@ export default function TableVendas() {
   };
 
   const handleClearFilters = () => {
-    clearFilterProduct();
+    setFilterProduct("");
     setFilter("");
     setFilterOrder("");
+    clearFilterProduct();
   };
 
   const handleFilterChange = (event) => {
@@ -289,7 +300,8 @@ export default function TableVendas() {
     };
 
     fetchData();
-  }, [page, rowsPerPage]);
+  }, []);
+  // }, [page, rowsPerPage]);
 
   return (
     <>
@@ -434,21 +446,22 @@ export default function TableVendas() {
                               Observação:
                             </Typography>
                             <Typography style={{ fontWeight: 300 }}>
-                              {"observacao"}
+                              {Math.floor(Math.random() * (55 - 1 + 1)) + 1}{" "}
+                              unidades em estoque
                             </Typography>
                           </div>
                         </div>
                       </TableCell>
                     }
                   >
-                    <Tooltip
+                    {/* <Tooltip
                       placement="right"
                       title={
                         <Typography fontSize={15}>{"nome_full"}</Typography>
                       }
-                    >
-                      <TableCell align="center">{nome}</TableCell>
-                    </Tooltip>
+                    > */}
+                    <TableCell align="center">{nome}</TableCell>
+                    {/* </Tooltip> */}
                     <TableCell align="center">{quantidade}</TableCell>
                     <TableCell align="center">{valor_unitario}</TableCell>
                     <TableCell align="center">{data_venda}</TableCell>
@@ -510,6 +523,10 @@ export default function TableVendas() {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage={"Linhas por página:"}
+        labelDisplayedRows={({ from, to, count }) =>
+          `${from}-${to} de ${count}`
+        }
       />
 
       <Popover

@@ -223,7 +223,7 @@ export default function VendasestoquePage() {
           padding: "35px 0 0 0",
           backgroundColor: COLORS.white,
           // overflow: "auto",
-          // height: "900px",
+          height: "100vh",
         }}
       >
         <Box style={{ width: "100%" }}>
