@@ -23,7 +23,7 @@ export default function DeleteEstoqueModal({
   };
 
   const deleteApi = async (idProduto) => {
-    console.log(`deletando produto de ID ${idProduto}`)
+    // console.log(`deletando produto de ID ${idProduto}`)
     try {
       const response = await api.delete(`/find/estoque/${idProduto}`);
       if (response.status === 200) {
@@ -34,7 +34,7 @@ export default function DeleteEstoqueModal({
         // setProductNotDeletedAlert(true);
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       // setProductNotDeletedAlert(true);
     }
   };

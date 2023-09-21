@@ -4,7 +4,7 @@ import React from "react";
 const ExportButton = (jsonData) => {
 
   const handleDownload = () => {
-    console.log(jsonData.jsonData);
+    // console.log(jsonData.jsonData);
   };
 
   return (

@@ -116,7 +116,7 @@ export default function VendasestoquePage() {
         api
           .post("/file/csv/venda", vendaFormData)
           .then((response) => {
-            console.log(response.status);
+            // console.log(response.status);
             if (response.status !== 200) {
               setAlertSeverity("error");
               setAlertMessage("Erro interno");
@@ -151,7 +151,7 @@ export default function VendasestoquePage() {
         api
           .post("/file/csv/estoque", estoqueFormData)
           .then((response) => {
-            console.log(response.status);
+            // console.log(response.status);
             if (response.status !== 200) {
               setAlertSeverity("error");
               setAlertMessage("Erro interno");

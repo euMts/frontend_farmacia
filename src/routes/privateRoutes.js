@@ -7,7 +7,8 @@ import Nav from "../components/nav";
 export const PrivateRoute = () => {
   const { signed } = useContext(AuthContext);
   
-  console.log(signed)
+  // console.log(signed)
+  const lastPage = window.location.pathname
 
   return signed ? ( // remover '!' para deploy.
     <div style={{ display: "flex" }}>
@@ -17,6 +18,6 @@ export const PrivateRoute = () => {
       </div>
     </div>
   ) : (
-    <Navigate to="/" />
+    <Navigate to={lastPage} />
   );
 };

@@ -14,7 +14,7 @@ const colorPalette = ["blue", "green", "yellow", "black", "orange", "pink"];
 
 const PredicaoChart = ({ data }) => {
   const dataKeys = Object.keys(data[0]).filter((key) => key !== "name");
-  console.log(dataKeys);
+  // console.log(dataKeys);
   return (
     <div
       style={{ display: "flex", marginTop: "30px", justifyContent: "center" }}

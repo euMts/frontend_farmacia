@@ -81,7 +81,7 @@ const PanoramaChart = () => {
     return keys;
   }, []);
 
-  console.log(allKeys);
+  // console.log(allKeys);
   return (
     <div
       style={{ display: "flex", marginTop: "5px", justifyContent: "center" }}

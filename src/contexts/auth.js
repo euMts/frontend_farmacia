@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const loadingStoreData = async () => {
+    const loadingStoreData = () => {
       const storageUser = localStorage.getItem("access_token");
 
       if (storageUser) {
