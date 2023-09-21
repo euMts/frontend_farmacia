@@ -33,6 +33,10 @@ export default function CardsWidget({
         justifyContent: "center",
         alignItems: "center",
         cursor: "pointer",
+        "&:hover": {
+          transform: "scale(1.05)", // Increase the size on hover
+          // Add any other styles you want for the hover effect here
+        },
         ...sx,
       }}
       {...other}

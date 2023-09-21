@@ -124,7 +124,7 @@ export default function VendasestoquePage() {
             } else if (response.status === 200) {
               // setData(response.data.data);
               setAlertSeverity("success");
-              setAlertMessage("Arquivo recebido! Reinicie a página.");
+              setAlertMessage("Arquivo recebido!");
               setIsAlertOpen(true);
             }
             setIsLoading(false); // Move o setIsLoading(false) para dentro do bloco .then()
@@ -158,7 +158,7 @@ export default function VendasestoquePage() {
               setIsAlertOpen(true);
             } else if (response.status === 200) {
               setAlertSeverity("success");
-              setAlertMessage("Arquivo recebido! Reinicie a página.");
+              setAlertMessage("Arquivo recebido!");
               setIsAlertOpen(true);
             }
             setIsLoading(false); // Parar de exibir o indicador de carregamento
@@ -208,6 +208,7 @@ export default function VendasestoquePage() {
         onClose={handleCloseAlert}
       >
         <Alert
+          variant="filled"
           onClose={handleCloseAlert}
           severity={alertSeverity}
           sx={{ width: "100%" }}

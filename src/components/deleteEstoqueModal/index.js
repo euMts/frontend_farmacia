@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import { Box, Button, MenuItem, Modal, Typography } from "@mui/material";
 import Iconify from "../iconify/Iconify";
 import { COLORS } from "../../assets/colors";
-import { ModalButtons } from "./deleteModalElements";
+import { ModalButtons } from "./deleteEstoqueModalElements";
 import api from "../../connection/api";
 
-export default function DeleteModal({
+export default function DeleteEstoqueModal({
   idProduto,
   nomeProduto,
   adicionadoEm,
   setProductDeletedAlert,
   setProductNotDeletedAlert,
   onClose,
+  handleDeleteAlert
 }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -24,9 +25,10 @@ export default function DeleteModal({
   const deleteApi = async (idProduto) => {
     console.log(`deletando produto de ID ${idProduto}`)
     try {
-      const response = await api.delete(`/find/vendas/${idProduto}`);
+      const response = await api.delete(`/find/estoque/${idProduto}`);
       if (response.status === 200) {
         // setProductDeletedAlert(true);
+        handleDeleteAlert()
         handleDeleteModalClose();
       } else {
         // setProductNotDeletedAlert(true);

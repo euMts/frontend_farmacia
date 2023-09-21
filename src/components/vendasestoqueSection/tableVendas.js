@@ -14,6 +14,8 @@ import {
   Checkbox,
   Popover,
   MenuItem,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { filter } from "lodash";
 import Label from "../label";
@@ -27,7 +29,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import DeleteModal from "../deleteModal";
+import DeleteVendasModal from "../deleteVendasModal";
 import EditVendaModal from "../editVendaModal";
 import api from "../../connection/api";
 
@@ -157,6 +159,9 @@ export default function TableVendas() {
   const [filterProduct, setFilterProduct] = useState("");
   const [filter, setFilter] = useState("");
   const [filterOrder, setFilterOrder] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("");
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -213,6 +218,8 @@ export default function TableVendas() {
       })
       .then((data) => {
         setVendasData(data.data.vendas.vendas);
+        setTotalItems(data.data.pagination.total_items)
+        setTotalPages(data.data.pagination.total_pages)
       })
       .catch((error) => {
         console.log("error", error);
@@ -236,6 +243,8 @@ export default function TableVendas() {
       })
       .then((data) => {
         setVendasData(data.data.vendas.vendas);
+        setTotalItems(data.data.pagination.total_items)
+        setTotalPages(data.data.pagination.total_pages)
       })
       .catch((error) => {
         console.log("error", error);
@@ -253,6 +262,8 @@ export default function TableVendas() {
       })
       .then((data) => {
         setVendasData(data.data.vendas.vendas);
+        setTotalItems(data.data.pagination.total_items)
+        setTotalPages(data.data.pagination.total_pages)
       })
       .catch((error) => {
         console.log("error", error);
@@ -301,10 +312,49 @@ export default function TableVendas() {
 
     fetchData();
   }, []);
-  // }, [page, rowsPerPage]);
+
+  const handleCloseAlert = () => {
+    setIsAlertOpen(false);
+    setAlertMessage("");
+    setAlertSeverity("success");
+  };
+
+  const handleDeleteAlert = () => {
+    setAlertSeverity("success");
+    setAlertMessage("Valor deletado!");
+    setIsAlertOpen(true);
+    handleSearchProduct();
+  };
+
+  const handleEditAlert = () => {
+    setAlertSeverity("success");
+    setAlertMessage("Valor Editado!");
+    setIsAlertOpen(true);
+    handleSearchProduct();
+  };
+
+  const handleEnterKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearchProduct();
+    }
+  };
 
   return (
     <>
+      <Snackbar
+        open={isAlertOpen}
+        autoHideDuration={10000}
+        onClose={handleCloseAlert}
+      >
+        <Alert
+          variant="filled"
+          onClose={handleCloseAlert}
+          severity={alertSeverity}
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
       <div
         style={{
           display: "flex",
@@ -319,6 +369,7 @@ export default function TableVendas() {
             value={filterProduct}
             id="select-produto-id"
             onChange={handleFilterByProduct}
+            onKeyDown={handleEnterKeyPress}
             // style={{ minWidth: 180, maxWidth: "100%" }}
             label="Produto"
           />
@@ -331,9 +382,6 @@ export default function TableVendas() {
             value={filter}
             style={{ marginLeft: "20px", height: "56px", minWidth: "160px" }}
           >
-            <MenuItem key="empty" value="">
-              {/* Empty option for clearing */}
-            </MenuItem>
             {filtroOptions.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -347,7 +395,7 @@ export default function TableVendas() {
             onChange={handleOrderChange}
             value={filterOrder}
             label="Ordem"
-            style={{ marginLeft: "20px", height: "56px", minWidth: "120px" }}
+            style={{ marginLeft: "20px", height: "56px", minWidth: "153px" }}
           >
             <MenuItem key={"asc"} value={"asc"}>
               {"Menor > maior"}
@@ -518,7 +566,7 @@ export default function TableVendas() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={totalPages} // Use the totalItems state variable
+        count={totalItems} // Use the totalItems state variable
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -554,12 +602,14 @@ export default function TableVendas() {
           valorUnitarioProduto={valorUnitarioProdutoAtual}
           dataVendaProduto={dataVendaProdutoAtual}
           onClose={handleCloseMenu}
+          handleEditAlert={handleEditAlert}
         />
-        <DeleteModal
+        <DeleteVendasModal
           idProduto={idProdutoAtual}
           nomeProduto={nomeProdutoAtual}
           adicionadoEm={adicionadoEmAtual}
           onClose={handleCloseMenu}
+          handleDeleteAlert={handleDeleteAlert}
         />
       </Popover>
     </>

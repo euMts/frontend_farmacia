@@ -35,7 +35,7 @@ const PanoramaChart = ({ data }) => {
   const allKeysArray = Array.from(allKeys);
 
   // console.log(allKeys);
-  console.table(allMonths);
+  // console.table(allMonths);
   return (
     <div
       style={{ display: "flex", marginTop: "5px", justifyContent: "center" }}

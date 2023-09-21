@@ -18,7 +18,7 @@ export default function EditVendaModal({
   quantidadeProduto,
   valorUnitarioProduto,
   dataVendaProduto,
-  setProductEditedAlert,
+  handleEditAlert,
   setProductNotEditedAlert,
   onClose,
 }) {
@@ -49,19 +49,31 @@ export default function EditVendaModal({
   };
 
   const editApi = async (idProduto) => {
-    console.log(`editando produto de ID ${idProduto}`);
-    console.log(`novo nome ${newProductName}`);
-    console.log(`nova quantidade ${newProductQuantity}`);
-    console.log(`novo valor unitario ${newProductValue}`);
-    console.log(`nova data venda ${newProductDate}`);
+
+    const editedFields = {};
+
+    if (newProductName !== "") {
+      editedFields.nome = newProductName;
+    }
+    if (newProductQuantity !== "") {
+      editedFields.quantidade = newProductQuantity;
+    }
+    if (newProductValue !== "") {
+      editedFields.valor_unitario = newProductValue;
+    }
+    if (newProductDate !== "") {
+      editedFields.data_venda = newProductDate; // SET TO DATE FORMAT, MUST BE MM/DD/YYYY HH:MM
+    }
+
     try {
-      const response = await api.put(`/find/vendas/${idProduto}`);
+      const response = await api.put(`/find/vendas/${idProduto}`, editedFields);
       if (response.status === 200) {
-        setProductEditedAlert(true);
+        handleEditAlert()
         handleEditModalClose();
       } else {
         setProductNotEditedAlert(true);
       }
+      handleEditModalClose();
     } catch (error) {
       setProductNotEditedAlert(true);
     }

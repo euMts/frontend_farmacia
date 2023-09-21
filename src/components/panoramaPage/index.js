@@ -25,6 +25,7 @@ import Iconify from "../iconify/Iconify";
 import PanoramaChart from "../panoramaChart/panoramaChart";
 import CustomTabPanel from "../customTabPanel/customTabPanelElement";
 import api from "../../connection/api";
+import ExportButton from "../exportButton";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -105,7 +106,8 @@ const PanoramaPage = () => {
   }, [data]);
 
   const handleExport = () => {
-    console.log("export info");
+    // console.log("export info");
+    // console.log(JSON.stringify(data[0]));
   };
 
   const handleChange = (event, newValue) => {
@@ -139,7 +141,7 @@ const PanoramaPage = () => {
           padding: "35px 0 0 0",
           backgroundColor: COLORS.white,
           // overflow: "auto",
-          height: "600px",
+          height: "100vh",
         }}
       >
         <Box style={{ width: "100%" }}>
@@ -159,7 +161,6 @@ const PanoramaPage = () => {
                 <Autocomplete
                   value={selectedOptionsMonth}
                   multiple
-                  
                   limitTags={1}
                   disableCloseOnSelect
                   style={{
@@ -233,13 +234,14 @@ const PanoramaPage = () => {
                 >
                   Buscar
                 </Button>
-                <Button
+                <ExportButton
+                  jsonData={data}
                   style={{ height: "56px" }}
                   variant="contained"
                   onClick={handleExport}
                 >
                   Exportar
-                </Button>
+                </ExportButton>
               </FilterLinePanoramaRight>
             </FilterLinePanorama>
             {/* {true ? ( */}

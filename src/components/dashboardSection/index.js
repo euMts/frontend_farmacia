@@ -43,7 +43,7 @@ const DashboardPage = () => {
         setDashboardData(response.data);
         // console.log(dashboardData)
       }
-      setIsLoading(false)
+      setIsLoading(false);
     } catch (error) {
       alert("Erro inesperado");
       setDashboardData(null);
@@ -54,11 +54,10 @@ const DashboardPage = () => {
     firstSearchApi();
   }, []);
 
-
   return (
     <>
-      <DashboardContainer>
-        <DashboardWrapper style={{ padding: "35px" }}>
+      <DashboardContainer style={{ height: "100vh" }}>
+        <DashboardWrapper style={{ padding: "0 35px" }}>
           <ItemsContainer>
             <Grid container spacing={6}>
               <Grid item xs={12} sm={6} md={3}>

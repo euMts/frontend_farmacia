@@ -127,7 +127,7 @@ const PredicaoPage = () => {
           padding: "35px 0 0 0",
           backgroundColor: COLORS.white,
           // overflow: "auto",
-          height: "600px",
+          height: "100vh",
         }}
       >
         <Box style={{ width: "100%" }}>

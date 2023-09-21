@@ -14,8 +14,6 @@ import {
   Checkbox,
   Popover,
   MenuItem,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { filter } from "lodash";
 import Label from "../label";
@@ -29,9 +27,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import DeleteModal from "../deleteModal";
 import EditEstoqueModal from "../editEstoqueModal";
-import api from "../../connection/api";
-import DeleteEstoqueModal from "../deleteEstoqueModal";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -48,50 +45,50 @@ const TABLE_HEAD = [
   { id: "adicionado_em", label: "Adicionado em", alignDirection: "center" },
 ];
 
-// const estoqueData = [
-//   {
-//     id: 0,
-//     nome: "Produto 1",
-//     quantidade: 3,
-//     unidade_medida: "UN",
-//     adicionado_em: "27/07/2023",
-//   },
-//   {
-//     id: 1,
-//     nome: "Produto 2",
-//     quantidade: 3,
-//     unidade_medida: "UN",
-//     adicionado_em: "27/07/2023",
-//   },
-//   {
-//     id: 2,
-//     nome: "Produto 3",
-//     quantidade: 6,
-//     unidade_medida: "UN",
-//     adicionado_em: "21/07/2023",
-//   },
-//   {
-//     id: 3,
-//     nome: "Produto 4",
-//     quantidade: 5,
-//     unidade_medida: "UN",
-//     adicionado_em: "22/07/2023",
-//   },
-//   {
-//     id: 4,
-//     nome: "Produto 5",
-//     quantidade: 3,
-//     unidade_medida: "UN",
-//     adicionado_em: "24/07/2023",
-//   },
-//   {
-//     id: 5,
-//     nome: "Produto 1",
-//     quantidade: 2,
-//     unidade_medida: "UN",
-//     adicionado_em: "21/07/2023",
-//   },
-// ];
+const estoqueData = [
+  {
+    id: 0,
+    nome: "Produto 1",
+    quantidade: 3,
+    unidade_medida: "UN",
+    adicionado_em: "27/07/2023",
+  },
+  {
+    id: 1,
+    nome: "Produto 2",
+    quantidade: 3,
+    unidade_medida: "UN",
+    adicionado_em: "27/07/2023",
+  },
+  {
+    id: 2,
+    nome: "Produto 3",
+    quantidade: 6,
+    unidade_medida: "UN",
+    adicionado_em: "21/07/2023",
+  },
+  {
+    id: 3,
+    nome: "Produto 4",
+    quantidade: 5,
+    unidade_medida: "UN",
+    adicionado_em: "22/07/2023",
+  },
+  {
+    id: 4,
+    nome: "Produto 5",
+    quantidade: 3,
+    unidade_medida: "UN",
+    adicionado_em: "24/07/2023",
+  },
+  {
+    id: 5,
+    nome: "Produto 1",
+    quantidade: 2,
+    unidade_medida: "UN",
+    adicionado_em: "21/07/2023",
+  },
+];
 
 function getComparator(order, orderBy) {
   return order === "desc"
@@ -109,52 +106,63 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
-const filtroOptions = [
-  {
-    value: "nome",
-    label: "Nome",
-  },
-  {
-    value: "quantidade",
-    label: "Quantidade",
-  },
-  {
-    value: "unidade_medida",
-    label: "Unidade de Medida",
-  },
-  {
-    value: "created_at",
-    label: "Adicionado em",
-  },
-];
+function applySortFilter(array, comparator, queryProduto) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  if (queryProduto) {
+    return filter(
+      // array,
+      stabilizedThis.map((el) => el[0]),
+      (_line) =>
+        queryProduto.length === 0 ||
+        queryProduto.some((item) =>
+          _line.nome.toLowerCase().includes(item.toLowerCase())
+        )
+    );
+  }
+  return stabilizedThis.map((el) => el[0]);
+}
 
 export default function TableEstoque() {
   const [newFeateredUsers, setNewFeateredUsers] = useState();
+
   const [open, setOpen] = useState(null);
+
   const [page, setPage] = useState(0);
+
   const [order, setOrder] = useState("asc");
+
   const [orderBy, setOrderBy] = useState("name");
+
+  const [filterProduct, setFilterProduct] = useState([]);
+
   const [filterType, setFilterType] = useState("");
+
   const [filterOperation, setFilterOperation] = useState("");
+
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const [startDate, setStartDate] = useState(null);
+
   const [endDate, setEndDate] = useState(null);
+
   const [filteredRows, setFilteredRows] = useState([]);
+
   const [isExpanded, setIsExpanded] = useState(false);
+
   const [idProdutoAtual, setIdProdutoAtual] = useState(null);
+
   const [nomeProdutoAtual, setNomeProdutoAtual] = useState("");
+
   const [adicionadoEmAtual, setAdicionadoEmAtual] = useState("");
+
   const [quantidadeProdutoAtual, setQuantidadeProdutoAtual] = useState("");
+
   const [unidadeMedidaAtual, setUnidadeMedidaAtual] = useState("");
-  const [estoqueData, setEstoqueData] = useState([]);
-  const [totalPages, setTotalPages] = useState(0);
-  const [totalItems, setTotalItems] = useState(0);
-  const [filterProduct, setFilterProduct] = useState("");
-  const [filter, setFilter] = useState("");
-  const [filterOrder, setFilterOrder] = useState("");
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertSeverity, setAlertSeverity] = useState("");
 
   const handleOpenMenu = (event) => {
     const idProduto = event.currentTarget.getAttribute("idProduto");
@@ -170,31 +178,6 @@ export default function TableEstoque() {
     setUnidadeMedidaAtual(unidadeMedida);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get(
-          `/find/estoque/pagination?page=${page + 1}&per_page=${rowsPerPage}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const { estoque, pagination } = response.data;
-
-        setEstoqueData(estoque.estoque);
-        setTotalItems(pagination.total_items);
-        setTotalPages(pagination.total_pages);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const handleCloseMenu = () => {
     setOpen(null);
   };
@@ -205,156 +188,42 @@ export default function TableEstoque() {
     setOrderBy(property);
   };
 
-  const handleChangePage = async (event, newPage) => {
-    const apiEndpoint = `/find/estoque/pagination?page=${
-      newPage + 1
-    }&per_page=${rowsPerPage}&product_name=${filterProduct}&filter_column=${filter}&order=${filterOrder}`;
-
-    try {
-      const response = await api.get(apiEndpoint, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const { estoque, pagination } = response.data;
-
-      setEstoqueData(estoque.estoque);
-      setTotalItems(pagination.total_items);
-      setTotalPages(pagination.total_pages);
-      setPage(newPage); // Update the page state
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    // setPage(0);
-    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-    const apiEndpoint = `/find/estoque/pagination?page=${1}&per_page=${
-      event.target.value
-    }&product_name=${filterProduct}&filter_column=${filter}&order=${filterOrder}`;
-
-    const response = api
-      .get(apiEndpoint, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((data) => {
-        setEstoqueData(data.data.estoque.estoque);
-        setTotalItems(data.data.pagination.total_items)
-        setTotalPages(data.data.pagination.total_pages)
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
+    setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleFilterByProduct = (event) => {
-    // setPage(0);
-    setFilterProduct(event.target.value);
+  const handleFilterByProduct = (value, newValue) => {
+    setPage(0);
+    setFilterProduct(newValue);
   };
 
   const clearFilterProduct = () => {
-    const apiEndpoint = `/find/estoque/pagination?page=${1}&per_page=${rowsPerPage}&product_name=${""}&filter_column=${""}&order=${""}`;
-
-    const response = api
-      .get(apiEndpoint, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((data) => {
-        setEstoqueData(data.data.estoque.estoque);
-        setTotalItems(data.data.pagination.total_items)
-        setTotalPages(data.data.pagination.total_pages)
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
+    setFilterProduct([]);
   };
 
   const handleClearFilters = () => {
-    setFilterProduct("");
-    setFilter("");
-    setFilterOrder("");
     clearFilterProduct();
   };
 
-  const isNotFound = !estoqueData.length && !!estoqueData;
+  const filteredProducts = applySortFilter(
+    estoqueData,
+    getComparator(order, orderBy),
+    filterProduct
+  );
 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
-  };
+  const isNotFound = !filteredProducts.length && !!filterProduct;
 
-  const handleOrderChange = (event) => {
-    setFilterOrder(event.target.value);
-  };
-
-  const handleSearchProduct = () => {
-    setPage(0);
-    const apiEndpoint = `/find/estoque/pagination?page=${1}&per_page=${rowsPerPage}&product_name=${filterProduct}&filter_column=${filter}&order=${filterOrder}`;
-
-    const response = api
-      .get(apiEndpoint, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((data) => {
-        setEstoqueData(data.data.estoque.estoque);
-        setTotalItems(data.data.pagination.total_items)
-        setTotalPages(data.data.pagination.total_pages)
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  };
-
-  const handleCloseAlert = () => {
-    setIsAlertOpen(false);
-    setAlertMessage("");
-    setAlertSeverity("success");
-  };
-
-  const handleDeleteAlert = () => {
-    setAlertSeverity("success");
-    setAlertMessage("Valor deletado!");
-    setIsAlertOpen(true);
-    handleSearchProduct();
-  };
-
-  const handleEditAlert = () => {
-    setAlertSeverity("success");
-    setAlertMessage("Valor Editado!");
-    setIsAlertOpen(true);
-    handleSearchProduct();
-  };
-
-  const handleEnterKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleSearchProduct();
-    }
-  };
+  const productOptions = Array.from(
+    new Set(estoqueData.map((item) => item.nome))
+  );
 
   return (
     <>
-      <Snackbar
-        open={isAlertOpen}
-        autoHideDuration={10000}
-        onClose={handleCloseAlert}
-      >
-        <Alert
-          variant="filled"
-          onClose={handleCloseAlert}
-          severity={alertSeverity}
-          sx={{ width: "100%" }}
-        >
-          {alertMessage}
-        </Alert>
-      </Snackbar>
       <div
         style={{
           display: "flex",
@@ -364,61 +233,35 @@ export default function TableEstoque() {
           alignItems: "center",
         }}
       >
-        <div>
-          <TextField
-            value={filterProduct}
-            id="select-produto-id"
-            onChange={handleFilterByProduct}
-            onKeyDown={handleEnterKeyPress}
-            // style={{ minWidth: 180, maxWidth: "100%" }}
-            label="Produto"
-          />
-          <TextField
-            id="outlined-select-filter"
-            select
-            displayEmpty
-            label="Filtro"
-            onChange={handleFilterChange}
-            value={filter}
-            style={{ marginLeft: "20px", height: "56px", minWidth: "160px" }}
-          >
-            {filtroOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            id="outlined-select-order"
-            select
-            displayEmpty
-            onChange={handleOrderChange}
-            value={filterOrder}
-            label="Ordem"
-            style={{ marginLeft: "20px", height: "56px", minWidth: "153px" }}
-          >
-            <MenuItem key={"asc"} value={"asc"}>
-              {"Menor > maior"}
-            </MenuItem>
-            <MenuItem key={"desc"} value={"desc"}>
-              {"Maior > menor"}
-            </MenuItem>
-          </TextField>
-          <Button
-            onClick={handleSearchProduct}
-            variant={"outlined"}
-            style={{ marginLeft: "20px", height: "56px" }}
-          >
-            Buscar
-          </Button>
-          <Button
-            onClick={handleClearFilters}
-            variant={"outlined"}
-            style={{ height: "56px", marginLeft: "20px" }}
-          >
-            Limpar Filtros
-          </Button>
-        </div>
+        <Autocomplete
+          value={filterProduct}
+          multiple
+          limitTags={1}
+          id="select-produto-id"
+          options={productOptions}
+          onChange={handleFilterByProduct}
+          // disableCloseOnSelect
+          getOptionLabel={(option) => option}
+          renderOption={(props, option, { selected }) => (
+            <li {...props}>
+              <Checkbox
+                icon={icon}
+                checkedIcon={checkedIcon}
+                style={{ marginRight: 0 }}
+                checked={selected}
+              />
+              {option}
+            </li>
+          )}
+          style={{ minWidth: 180, maxWidth: "100%" }}
+          renderInput={(params) => (
+            <TextField {...params} label="Produto" placeholder="" />
+          )}
+        />
+
+        <Button onClick={handleClearFilters} variant={"outlined"} style={{height: "56px"}}>
+          Limpar Filtros
+        </Button>
       </div>
       <Scrollbar>
         <TableContainer sx={{ minWidth: 800 }}>
@@ -431,7 +274,8 @@ export default function TableEstoque() {
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {estoqueData
+              {filteredProducts
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((data) => {
                   const {
                     id,
@@ -533,15 +377,11 @@ export default function TableEstoque() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={totalItems}
+        count={filteredProducts.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage={"Linhas por página:"}
-        labelDisplayedRows={({ from, to, count }) =>
-          `${from}-${to} de ${count}`
-        }
       />
       <Popover
         open={Boolean(open)}
@@ -567,15 +407,13 @@ export default function TableEstoque() {
           quantidadeProduto={quantidadeProdutoAtual}
           unidadeMedida={unidadeMedidaAtual}
           onClose={handleCloseMenu}
-          handleEditAlert={handleEditAlert}
         />
 
-        <DeleteEstoqueModal
+        <DeleteModal
           idProduto={idProdutoAtual}
           nomeProduto={nomeProdutoAtual}
           adicionadoEm={adicionadoEmAtual}
           onClose={handleCloseMenu}
-          handleDeleteAlert={handleDeleteAlert}
         />
       </Popover>
     </>

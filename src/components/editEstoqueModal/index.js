@@ -20,6 +20,7 @@ export default function EditEstoqueModal({
   setProductEditedAlert,
   setProductNotEditedAlert,
   onClose,
+  handleEditAlert
 }) {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [newProductName, setNewProductName] = useState("");
@@ -48,14 +49,28 @@ export default function EditEstoqueModal({
     console.log(`novo nome ${newProductName}`);
     console.log(`nova quantidade ${newProductQuantity}`);
     console.log(`nova unidade de medida ${newProductUnity}`);
+
+    const editedFields = {};
+
+    if (newProductName !== "") {
+      editedFields.nome = newProductName;
+    }
+    if (newProductQuantity !== "") {
+      editedFields.quantidade = newProductQuantity;
+    }
+    if (newProductUnity !== "") {
+      editedFields.unidade_medida = newProductUnity;
+    }
+
     try {
-      const response = await api.patch(`/produto/${idProduto}`);
+      const response = await api.put(`/find/estoque/${idProduto}`, editedFields);
       if (response.status === 200) {
-        setProductEditedAlert(true);
+        handleEditAlert()
         handleEditModalClose();
       } else {
         setProductNotEditedAlert(true);
       }
+      handleEditModalClose();
     } catch (error) {
       setProductNotEditedAlert(true);
     }
