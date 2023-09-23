@@ -1,8 +1,7 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -10,60 +9,80 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import MainSales from "../dashboardSection/MainSalesElements";
 
-const PanoramaChart = ({ data }) => {
-  // console.log(data);
-  // Extract all unique keys from the JSON data
-  const allKeys = new Set();
+const data = [
+  {
+    name: "Janeiro",
+    Produto1: {
+      valor: 400,
+      nome: "alprazomal",
+      cor: "red",
+    },
+    Produto2: {
+      valor: 200,
+      nome: "dramin",
+      cor: "blue",
+    },
+  },
+  {
+    name: "Fevereiro",
+    Produto1: {
+      valor: 100,
+      nome: "dorflex",
+      cor: "purple",
+    },
+    Produto2: {
+      valor: 300,
+      nome: "dipirona",
+      cor: "orange",
+    },
+  },
+  // Adicione mais dados conforme necessário
+];
 
-  const allMonths = [];
+function getCorByNome(monthData, productName) {
+  for (const key in monthData) {
+    if (monthData.hasOwnProperty(key) && monthData[key].nome === productName) {
+      return monthData[key].cor;
+    }
+  }
+  return null; // Return null if not found
+}
 
-  Object.values(data).forEach((element) => { // para cada mes
-    // console.log(element)
-    allMonths.push(element)
-  });
+const PanoramaChart = () => {
+  // Extrair todas as chaves de produtos para criar as barras do gráfico
+  const productKeys = Object.keys(data[0]).filter((key) => key !== "name");
 
-  Object.values(data).forEach((obj) => {
-    Object.keys(obj).forEach((key) => {
-      if (key !== "month") {
-        allKeys.add(key);
-      }
-    });
-  });
-
-  const allKeysArray = Array.from(allKeys);
-
-  // console.log(allKeys);
-  // console.table(allMonths);
   return (
-    <div
-      style={{ display: "flex", marginTop: "5px", justifyContent: "center" }}
-    >
-      <BarChart
-        width={850}
-        height={320}
-        data={Object.values(data)} // Use Object.values(data) here
-        margin={{
-          top: 5,
-          right: 0,
-          left: 0,
-          bottom: 0,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="month" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        {allKeysArray.map((key, index) => (
-          <Bar
-            key={index}
-            dataKey={key}
-            fill={`#${(((1 << 24) * Math.random()) | 0).toString(16)}`}
+    <div style={{ width: "100%", height: 320 }}>
+      <ResponsiveContainer>
+        <BarChart data={Object.values(data)}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend 
+           payload={
+            productKeys.map(
+              (item, index) => ({
+                id: item.name,
+                type: "square",
+                value: `${item.name} (${item.value}%)`,
+                color: item.cor
+              })
+            )
+          }
           />
-        ))}
-      </BarChart>
+          {productKeys.map((productKey, index) => (
+            <Bar
+              key={index}
+              dataKey={`${productKey}.valor`}
+              name={index}
+              fill={data[0][productKey].cor}
+            />
+          ))}
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };
