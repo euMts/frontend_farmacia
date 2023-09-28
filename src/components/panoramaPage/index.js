@@ -37,6 +37,73 @@ function a11yProps(index) {
   };
 }
 
+const defaultData = [
+  {
+    2018: {
+      janeiro: {
+        month: "janeiro",
+        matheus: 4000,
+        amanda: 2400,
+        mosconi: 2400,
+        luis: 6400,
+        joao: 2400,
+      },
+      fevereiro: {
+        month: "fevereiro",
+        carlos: 4000,
+        teste: 2400,
+        matheus: 6400,
+        valdir: 2400,
+        isabela: 7400,
+      },
+      // março: {
+      //   month: "março",
+      //   a: 4000,
+      //   b: 2400,
+      //   c: 6400,
+      //   d: 2400,
+      //   e: 7400,
+      // },
+    },
+    2019: {
+      janeiro: {
+        month: "janeiro",
+        matheus: 4000,
+        amanda: 2400,
+        joao: 2400,
+        mosconi: 2400,
+        luis: 6400,
+      },
+      fevereiro: {
+        month: "fevereiro",
+        carlos: 4000,
+        teste: 2400,
+        matheus: 6400,
+        valdir: 2400,
+        isabela: 7400,
+      },
+    },
+    2020: {
+      janeiro: {
+        month: "janeiro",
+        matheus: 4000,
+        amanda: 2400,
+        joao: 2400,
+        mosconi: 2400,
+        luis: 6400,
+      },
+      fevereiro: {
+        month: "fevereiro",
+        a: 4000,
+        b: 2400,
+        c: 2400,
+        d: 2400,
+        e: 6400,
+      },
+    },
+  },
+];
+
 const PanoramaPage = () => {
   const [selectedOptionsMonth, setSelectedOptionsMonth] = useState([]);
   const [selectedOptionsYear, setSelectedOptionsYear] = useState([]);
@@ -72,7 +139,8 @@ const PanoramaPage = () => {
           // alert("Usuário ou senha incorretos")
         } else {
           setIsLoading(false);
-          setData([response.data.data]);
+          // setData([response.data.data]);
+          setData(defaultData);
         }
       } catch (error) {
         alert("Erro inesperado");
