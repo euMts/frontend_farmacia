@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import MainSales from "../dashboardSection/MainSalesElements";
+import CustomTooltip from "./CustomTooltip";
 
 const PanoramaChart = ({ data }) => {
   // console.log(data);
@@ -53,8 +54,8 @@ const PanoramaChart = ({ data }) => {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
-        <YAxis />
-        <Tooltip />
+        <YAxis allowReorder/>
+        <Tooltip content={<CustomTooltip/>} />
         <Legend />
         {allKeysArray.map((key, index) => (
           <Bar

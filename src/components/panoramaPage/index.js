@@ -41,20 +41,36 @@ const defaultData = [
   {
     2018: {
       janeiro: {
+        original: {
+          month: "janeiro",
+          matheus: 4000,
+          amanda: 2400,
+          mosconi: 2400,
+          luis: 6400,
+          joao: 2400,
+        },
         month: "janeiro",
-        matheus: 4000,
-        amanda: 2400,
-        mosconi: 2400,
-        luis: 6400,
-        joao: 2400,
+        1: 4000,
+        2: 2400,
+        3: 2400,
+        4: 6400,
+        5: 2400,
       },
       fevereiro: {
+        original: {
+          month: "fevereiro",
+          carlos: 4000,
+          teste: 2400,
+          matheus: 6400,
+          valdir: 2400,
+          isabela: 7400,
+        },
         month: "fevereiro",
-        carlos: 4000,
-        teste: 2400,
-        matheus: 6400,
-        valdir: 2400,
-        isabela: 7400,
+        1: 4000,
+        2: 2400,
+        3: 6400,
+        4: 2400,
+        5: 7400,
       },
       // março: {
       //   month: "março",
@@ -139,8 +155,8 @@ const PanoramaPage = () => {
           // alert("Usuário ou senha incorretos")
         } else {
           setIsLoading(false);
-          setData([response.data.data]);
-          // setData(defaultData);
+          // setData([response.data.data]);
+          setData(defaultData);
         }
       } catch (error) {
         alert("Erro inesperado");

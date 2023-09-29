@@ -114,7 +114,7 @@ const PredicaoPage = () => {
   };
 
   const handleExport = () => {
-    console.log("export info");
+    console.log(data, "export..");
   };
 
   return (
