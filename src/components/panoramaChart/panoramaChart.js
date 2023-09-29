@@ -27,7 +27,7 @@ const PanoramaChart = ({ data }) => {
 
   Object.values(data).forEach((obj) => {
     Object.keys(obj).forEach((key) => {
-      if (key !== "month") {
+      if (key !== "month" && key !== "original") {
         allKeys.add(key);
       }
     });

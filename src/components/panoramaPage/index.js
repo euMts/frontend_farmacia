@@ -155,8 +155,8 @@ const PanoramaPage = () => {
           // alert("Usuário ou senha incorretos")
         } else {
           setIsLoading(false);
-          // setData([response.data.data]);
-          setData(defaultData);
+          setData([response.data.data]);
+          // setData(defaultData);
         }
       } catch (error) {
         alert("Erro inesperado");
