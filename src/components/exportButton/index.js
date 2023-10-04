@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React from "react";
 
-const ExportButton = (jsonData) => {
+const ExportButton = (data) => {
   const getCsv = (data) => {
     let myCsv = "ano;mes;produto;vendas\n";
     data.forEach((data, dataIndex) => {
@@ -10,13 +10,13 @@ const ExportButton = (jsonData) => {
       arrayAnos.forEach((ano, anoIndex) => {
         let arrayMeses = Object.keys(data[ano]);
         arrayMeses.forEach((mes, mesIndex) => {
-          let valores = Object.keys(data[ano][mes]);
+          let valores = Object.keys(data[ano][mes]["original"]);
           valores.forEach((valor, valorIndex) => {
             if (valorIndex != 0) {
               myCsv += `${ano};${mes.replace("ç", "c")};${valor.replace(
                 "ç",
                 "c"
-              )};${data[ano][mes][valor]}\n`;
+              )};${data[ano][mes]["original"][valor]}\n`;
             }
           });
         });
@@ -46,8 +46,9 @@ const ExportButton = (jsonData) => {
   };
 
   const handleDownload = () => {
-    if (jsonData.jsonData != null) {
-      const csvData = getCsv(jsonData.jsonData);
+    if (data.jsonData != null) {
+      const csvData = getCsv(data.jsonData);
+      console.table(csvData);
       downloadCsv(csvData);
     }
   };
@@ -55,6 +56,7 @@ const ExportButton = (jsonData) => {
   return (
     <>
       <Button
+        disabled={data.isDisabled}
         style={{ height: "56px" }}
         variant="contained"
         onClick={handleDownload}

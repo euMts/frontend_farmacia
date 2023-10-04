@@ -9,8 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-
-const colorPalette = ["blue", "green", "yellow", "black", "orange", "pink"];
+import { colorPalette } from "../../assets/colors";
 
 const PredicaoChart = ({ data }) => {
   const dataKeys = Object.keys(data[0]).filter((key) => key !== "name");
@@ -38,7 +37,7 @@ const PredicaoChart = ({ data }) => {
         {dataKeys.map((key, index) => (
           <Line
             key={index}
-            type="monotone"
+            type="natural"
             dataKey={key}
             stroke={colorPalette[index % colorPalette.length]}
             strokeWidth={2}
@@ -48,7 +47,7 @@ const PredicaoChart = ({ data }) => {
         <Line
           type="monotone"
           dataKey="Previsão"
-          stroke="red"
+          stroke="#006600"
           strokeDasharray="5 5"
           strokeWidth={2}
         />

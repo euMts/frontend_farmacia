@@ -72,50 +72,6 @@ const defaultData = [
         4: 2400,
         5: 7400,
       },
-      // março: {
-      //   month: "março",
-      //   a: 4000,
-      //   b: 2400,
-      //   c: 6400,
-      //   d: 2400,
-      //   e: 7400,
-      // },
-    },
-    2019: {
-      janeiro: {
-        month: "janeiro",
-        matheus: 4000,
-        amanda: 2400,
-        joao: 2400,
-        mosconi: 2400,
-        luis: 6400,
-      },
-      fevereiro: {
-        month: "fevereiro",
-        carlos: 4000,
-        teste: 2400,
-        matheus: 6400,
-        valdir: 2400,
-        isabela: 7400,
-      },
-    },
-    2020: {
-      janeiro: {
-        month: "janeiro",
-        matheus: 4000,
-        amanda: 2400,
-        joao: 2400,
-        mosconi: 2400,
-        luis: 6400,
-      },
-      fevereiro: {
-        month: "fevereiro",
-        a: 4000,
-        b: 2400,
-        c: 2400,
-        d: 2400,
-        e: 6400,
-      },
     },
   },
 ];
@@ -197,6 +153,8 @@ const PanoramaPage = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const newData = {};
 
   const monthOptions = [
     "Janeiro",
@@ -319,6 +277,7 @@ const PanoramaPage = () => {
                   Buscar
                 </Button>
                 <ExportButton
+                  isDisabled={data ? false : true}
                   jsonData={data}
                   style={{ height: "56px" }}
                   variant="contained"

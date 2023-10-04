@@ -1,6 +1,7 @@
-function CustomTooltip({ payload }) {
+function CustomTooltip({ payload, allProductsArray, colorPalette }) {
   const { payload: internalPayload } = payload[1] || {};
-  // console.log(internalPayload?.original);
+  // console.log(allProductsArray);
+  // console.log(colorPalette[allProductsArray.indexOf("matheus")]);
   return (
     <div
       className="custom-tooltip"
@@ -14,7 +15,7 @@ function CustomTooltip({ payload }) {
         border: "1px solid #A9A9A9",
         borderRadius: "4px",
         // boxShadow: "10px 10px 20px black",
-        padding: "4px"
+        padding: "4px",
       }}
     >
       {Object.entries(internalPayload?.original || {}).map(([key, value]) => (
@@ -36,7 +37,9 @@ function CustomTooltip({ payload }) {
                 style={{
                   width: "8px",
                   height: "8px",
-                  backgroundColor: "red",
+                  backgroundColor: allProductsArray.includes(key)
+                    ? colorPalette[allProductsArray.indexOf(key)]
+                    : "black",
                   marginRight: "5px",
                 }}
                 id="square-color"

@@ -29,19 +29,19 @@ const PredicaoPage = () => {
 
   const firstSearchApi = async () => {
     setErrorMessage("");
-      try {
-        const response = await api.get("/find/products");
-        if (response.status === 422) {
-          // alert("Usuário ou senha incorretos")
-        } else {
-          setProductOptions(response.data.uniqueProducts);
-        }
-        // console.log(productOptions);
-      } catch (error) {
-        alert("Erro inesperado");
-        setProductOptions("");
-        setErrorMessage();
+    try {
+      const response = await api.get("/find/products");
+      if (response.status === 422) {
+        // alert("Usuário ou senha incorretos")
+      } else {
+        setProductOptions(response.data.uniqueProducts);
       }
+      // console.log(productOptions);
+    } catch (error) {
+      alert("Erro inesperado");
+      setProductOptions("");
+      setErrorMessage();
+    }
   };
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const PredicaoPage = () => {
   };
 
   const handleStart = () => {
-    searchApi(inputValue)
+    searchApi(inputValue);
     // console.log(value);
     // console.log(data);
     // setData([
@@ -114,7 +114,83 @@ const PredicaoPage = () => {
   };
 
   const handleExport = () => {
-    console.log(data, "export..");
+
+    const downloadCsv = (csvData) => {
+      const currentDate = new Date();
+      const formattedDate = `${currentDate.getDate()}-${
+        currentDate.getMonth() + 1
+      }-${currentDate.getFullYear()}`;
+      const fileName = `predicao-${formattedDate}.csv`;
+  
+      const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      a.download = fileName; // The filename for the downloaded CSV
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    };
+
+    const dataToCSV = (data) => {
+      let csv = "";
+
+      for (let item of data) {
+        for (let key in item) {
+          // Ignorar a chave "name" e a chave "Previsão" do penúltimo item
+          if (
+            key === "name" ||
+            (key === "Previsão" && item === data[data.length - 2])
+          )
+            continue;
+
+          let year = null;
+          let saleValue = null;
+          let predictionValue = null;
+
+          if (key.startsWith("Vendas de ")) {
+            year = key.split(" ")[2];
+            saleValue = item[key];
+          } else if (key === "Previsão") {
+            year = new Date().getFullYear(); // assumindo que a previsão é para o ano atual
+            predictionValue = item[key];
+          }
+
+          csv += `${year || "null"};${item.name};${inputValue};${
+            saleValue || "null"
+          };${predictionValue || "null"}\n`;
+        }
+      }
+
+      const dataArray = csv.split('\n').map((row) => {
+        const [Ano, mes, produto, venda, previsao] = row.split(';');
+        return { Ano, mes, produto, venda, previsao };
+      });
+    
+      // Remove any empty objects from the array
+      const filteredArray = dataArray.filter((item) => !!item.Ano);
+    
+      // Sort the array by the "Ano" property
+      filteredArray.sort((a, b) => {
+        const yearA = parseInt(a.Ano);
+        const yearB = parseInt(b.Ano);
+        return yearA - yearB;
+      });
+    
+      // Generate the sorted CSV
+      let orderedCsv = "Ano;Mes;Produto;Venda;Predicao\n";
+      filteredArray.forEach((item) => {
+        orderedCsv += `${item.Ano};${item.mes};${item.produto};${item.venda};${item.previsao}\n`;
+      });
+    
+      return orderedCsv;
+    };
+
+
+
+    downloadCsv(dataToCSV(data))
   };
 
   return (
@@ -145,6 +221,7 @@ const PredicaoPage = () => {
             <FilterLinePredicao>
               <FilterLinePredicaoLeft>
                 <Autocomplete
+                  style={{ marginRight: "15px" }}
                   value={value}
                   onChange={(event, newValue) => {
                     setValue(newValue);
@@ -177,6 +254,7 @@ const PredicaoPage = () => {
                   Iniciar
                 </Button>
                 <Button
+                  disabled={data.length > 0 ? false : true}
                   style={{ height: "56px" }}
                   variant="contained"
                   onClick={handleExport}

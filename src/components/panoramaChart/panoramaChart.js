@@ -12,30 +12,47 @@ import {
 } from "recharts";
 import MainSales from "../dashboardSection/MainSalesElements";
 import CustomTooltip from "./CustomTooltip";
+import { colorPalette } from "../../assets/colors";
 
 const PanoramaChart = ({ data }) => {
-  // console.log(data);
-  // Extract all unique keys from the JSON data
   const allKeys = new Set();
-
   const allMonths = [];
+  const allProducts = new Set();
+  const allObj = [];
 
-  Object.values(data).forEach((element) => { // para cada mes
+  Object.values(data).forEach((element) => {
+    // para cada mes
     // console.log(element)
-    allMonths.push(element)
+    allMonths.push(element);
   });
 
   Object.values(data).forEach((obj) => {
     Object.keys(obj).forEach((key) => {
       if (key !== "month" && key !== "original") {
         allKeys.add(key);
+        allObj.push(obj);
+      }
+      if (key == "original") {
+        Object.keys(obj.original).forEach((product) => {
+          if (!allProducts.has(product) && product !== "month") {
+            allProducts.add(product);
+          }
+        });
       }
     });
   });
 
   const allKeysArray = Array.from(allKeys);
+  const allProductsArray = Array.from(allProducts);
 
-  // console.log(allKeys);
+  // console.log(allObj);
+  // Array.from(allProducts).map((key, index) => {
+  //   console.log(key, index);
+  // });
+
+  // allKeysArray.map((key, index) => (console.log(index)))
+
+  // console.log(allMonths);
   // console.table(allMonths);
   return (
     <div
@@ -54,16 +71,32 @@ const PanoramaChart = ({ data }) => {
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
-        <YAxis allowReorder/>
-        <Tooltip content={<CustomTooltip/>} />
-        <Legend />
-        {allKeysArray.map((key, index) => (
-          <Bar
-            key={index}
-            dataKey={key}
-            fill={`#${(((1 << 24) * Math.random()) | 0).toString(16)}`}
-          />
-        ))}
+        <YAxis allowReorder />
+        <Tooltip
+          content={
+            <CustomTooltip
+              allProductsArray={allProductsArray}
+              colorPalette={colorPalette}
+            />
+          }
+        />
+        {/* <Legend /> */}
+        {allKeysArray.map((key, index) => {
+          return (
+            <Bar
+              key={index}
+              dataKey={key}
+              fill={"colorPalette[index % colorPalette.lenght]"}
+            >
+              {allProductsArray.map((key2, index2) => {
+                // console.log(key2)
+                return (
+                  <Cell fill={"colorPalette[index % colorPalette.lenght]"} />
+                );
+              })}
+            </Bar>
+          );
+        })}
       </BarChart>
     </div>
   );
