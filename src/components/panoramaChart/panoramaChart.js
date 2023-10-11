@@ -61,7 +61,7 @@ const PanoramaChart = ({ data }) => {
       <BarChart
         width={850}
         height={320}
-        data={(data)} // Use Object.values(data) here
+        data={Object.values(data)} // Use Object.values(data) here
         margin={{
           top: 5,
           right: 0,
@@ -81,24 +81,22 @@ const PanoramaChart = ({ data }) => {
           }
         />
         {/* <Legend /> */}
-        {/* {allObj.map((key, index) => {
-          if(key[index])
-          console.log(key[index].value, key[index].key);
-          if(key[index])
-          return ( */}
+        {allKeysArray.map((key, index) => {
+          return (
             <Bar
-              // key={index}
-              dataKey='value'
+              key={index}
+              dataKey={key}
               fill={"colorPalette[index % colorPalette.lenght]"}
             >
-              {/* {allObj.map((key2, index2) => {
+              {allProductsArray.map((key2, index2) => {
+                // console.log(key2)
                 return (
                   <Cell fill={"colorPalette[index % colorPalette.lenght]"} />
                 );
-              })} */}
+              })}
             </Bar>
-          {/* );
-        })} */}
+          );
+        })}
       </BarChart>
     </div>
   );
