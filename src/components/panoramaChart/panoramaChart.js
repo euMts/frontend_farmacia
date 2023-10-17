@@ -219,9 +219,9 @@ function PanoramaChart({ data }) {
   );
 
   return (
-    <Box height="30rem">
-      <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart width={1000} height={400} data={dataWithColors}>
+    <Box>
+      <div style={{ display: "flex", marginTop: "5px", justifyContent: "center" }}>
+        <ComposedChart width={850} height={320} data={dataWithColors}>
           <CartesianGrid stroke="#E5E5E5" />
 
           <XAxis scale="auto" dataKey="mes" />
@@ -235,7 +235,7 @@ function PanoramaChart({ data }) {
           {generateBar(4)}
           {generateBar(5)}
         </ComposedChart>
-      </ResponsiveContainer>
+      </div>
     </Box>
   );
 }
