@@ -48,6 +48,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("username");
     localStorage.removeItem("profile_pic_url");
     setUser(null);
+    window.location.href = "/"
     return <Navigate to="/" />;
   };
 

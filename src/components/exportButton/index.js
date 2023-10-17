@@ -4,22 +4,17 @@ import React from "react";
 const ExportButton = (data) => {
   const getCsv = (data) => {
     let myCsv = "ano;mes;produto;vendas\n";
-    data.forEach((data, dataIndex) => {
-      let arrayAnos = Object.keys(data);
 
-      arrayAnos.forEach((ano, anoIndex) => {
-        let arrayMeses = Object.keys(data[ano]);
-        arrayMeses.forEach((mes, mesIndex) => {
-          let valores = Object.keys(data[ano][mes]["original"]);
-          valores.forEach((valor, valorIndex) => {
-            if (valorIndex != 0) {
-              myCsv += `${ano};${mes.replace("ç", "c")};${valor.replace(
-                "ç",
-                "c"
-              )};${data[ano][mes]["original"][valor]}\n`;
-            }
-          });
-        });
+    // Iterate through the data
+    data.forEach((item) => {
+      const { ano, mes } = item;
+      const meses = Object.keys(item).filter((key) =>
+        key.startsWith("produto")
+      );
+
+      meses.forEach((produtoKey) => {
+        const produto = item[produtoKey];
+        myCsv += `${ano};${mes};${produto.nome};${produto.valor}\n`;
       });
     });
 
@@ -38,7 +33,7 @@ const ExportButton = (data) => {
     const a = document.createElement("a");
     a.style.display = "none";
     a.href = url;
-    a.download = fileName; // The filename for the downloaded CSV
+    a.download = fileName; 
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);

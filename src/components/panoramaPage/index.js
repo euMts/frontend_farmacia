@@ -37,43 +37,25 @@ function a11yProps(index) {
   };
 }
 
-const defaultData = [
+const dataFernando = [
   {
-    2018: {
-      janeiro: {
-        original: {
-          month: "janeiro",
-          matheus: 4000,
-          amanda: 2400,
-          mosconi: 2400,
-          luis: 6400,
-          joao: 2400,
-        },
-        month: "janeiro",
-        1: 4000,
-        2: 2400,
-        3: 2400,
-        4: 6400,
-        5: 2400,
-      },
-      fevereiro: {
-        original: {
-          month: "fevereiro",
-          carlos: 4000,
-          teste: 2400,
-          matheus: 6400,
-          valdir: 2400,
-          isabela: 7400,
-        },
-        month: "fevereiro",
-        1: 4000,
-        2: 2400,
-        3: 6400,
-        4: 2400,
-        5: 7400,
-      },
-    },
+    ano: 2018,
+    mes: 'Janeiro',
+    produto1: { valor: 2000, id: 1, nome: 'Fulano 1' },
+    produto2: { valor: 3250, id: 2, nome: 'Beltrano 1' },
+    produto3: { valor: 3000, id: 3, nome: 'Sicrano 1' },
+    produto4: { valor: 4000, id: 4, nome: 'Sicrano 2' },
+    produto5: { valor: 1500, id: 5, nome: 'Beltrano 3' }
   },
+  {
+    ano: 2018,
+    mes: 'Fevereiro',
+    produto1: { valor: 4500, id: 6, nome: 'Fulano 2' },
+    produto2: { valor: 2750, id: 7, nome: 'Beltrano 2' },
+    produto3: { valor: 3000, id: 4, nome: 'Sicrano 2' },
+    produto4: { valor: 4000, id: 1, nome: 'Fulano 1' },
+    produto5: { valor: 3750, id: 8, nome: 'Sicrano 3' }
+  }
 ];
 
 const PanoramaPage = () => {
@@ -111,8 +93,8 @@ const PanoramaPage = () => {
           // alert("Usuário ou senha incorretos")
         } else {
           setIsLoading(false);
-          setData([response.data.data]);
-          // setData(defaultData);
+          setData(response.data.data);
+          // setData(dataFernando);
         }
       } catch (error) {
         alert("Erro inesperado");
@@ -137,11 +119,10 @@ const PanoramaPage = () => {
 
   useEffect(() => {
     if (data) {
+      const uniqueYears = new Set(data.map((item) => item.ano));
       const tabLabels =
-        data.length > 0
-          ? Object.keys(data[0]).filter((key) => key !== "month")
-          : [];
-      setTabLabels(tabLabels);
+        data.length > 0 ? new Set(data.map((item) => item.ano)) : [];
+      setTabLabels(Array.from(tabLabels));
     }
   }, [data]);
 
@@ -305,20 +286,11 @@ const PanoramaPage = () => {
                     ))}
                   </Tabs>
                 </Box>
-                {/* <CustomTabPanel value={value} index={0}>
-                  <PanoramaChart data={data[0]["2018"]} />
-                </CustomTabPanel>
-
-                <CustomTabPanel value={value} index={1}>
-                  <PanoramaChart data={data[0]["2019"]} />
-                </CustomTabPanel> */}
-                {tabLabels.map((label, index) => (
-                  <CustomTabPanel key={index} value={value} index={index}>
-                    {data[0][label] ? (
-                      <PanoramaChart data={data[0][label]} />
-                    ) : (
-                      <></>
-                    )}
+                {tabLabels.map((year, index) => (
+                  <CustomTabPanel key={year} value={value} index={index}>
+                    <PanoramaChart
+                      data={data.filter((item) => item.ano === year)}
+                    />
                   </CustomTabPanel>
                 ))}
               </>
@@ -337,9 +309,10 @@ const PanoramaPage = () => {
             {isLoading ? (
               <Box
                 sx={{
-                  display: "flex",
+                  // display: "flex",
                   marginLeft: "500px",
                   marginTop: "150px",
+                  position: "fixed",
                 }}
               >
                 <CircularProgress />
