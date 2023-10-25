@@ -45,7 +45,7 @@ const DashboardPage = () => {
       }
       setIsLoading(false);
     } catch (error) {
-      alert("Erro inesperado");
+      // alert("Erro inesperado");
       setDashboardData(null);
     }
   };

@@ -97,7 +97,7 @@ const PanoramaPage = () => {
           // setData(dataFernando);
         }
       } catch (error) {
-        alert("Erro inesperado");
+        // alert("Erro inesperado");
         setData(null);
       }
     } else {

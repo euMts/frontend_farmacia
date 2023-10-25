@@ -38,7 +38,7 @@ const PredicaoPage = () => {
       }
       // console.log(productOptions);
     } catch (error) {
-      alert("Erro inesperado");
+      // alert("Erro inesperado");
       setProductOptions("");
       setErrorMessage();
     }
@@ -70,7 +70,7 @@ const PredicaoPage = () => {
           setData(response.data.data);
         }
       } catch (error) {
-        alert("Erro inesperado");
+        // alert("Erro inesperado");
         setData([]);
       }
     } else {
