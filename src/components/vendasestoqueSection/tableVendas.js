@@ -36,8 +36,8 @@ import api from "../../connection/api";
 const TABLE_HEAD = [
   { id: "spacing", label: "", alignDirection: "center" },
   { id: "nome", label: "Nome", alignDirection: "center" },
-  { id: "quantidade", label: "Quantidade", alignDirection: "center" },
-  { id: "valor_unitario", label: "Valor Unitário", alignDirection: "center" },
+  { id: "quantidade", label: "Quantidade", alignDirection: "right" },
+  { id: "valor_unitario", label: "Valor Unitário", alignDirection: "right" },
   { id: "data_venda", label: "Data da Venda", alignDirection: "center" },
   { id: "adicionado_em", label: "Adicionado em", alignDirection: "center" },
 ];
@@ -508,10 +508,10 @@ export default function TableVendas() {
                         <Typography fontSize={15}>{"nome_full"}</Typography>
                       }
                     > */}
-                    <TableCell align="center">{nome}</TableCell>
+                    <TableCell align="center" style={{width: "300px"}}>{nome}</TableCell>
                     {/* </Tooltip> */}
-                    <TableCell align="center">{quantidade}</TableCell>
-                    <TableCell align="center">{valor_unitario}</TableCell>
+                    <TableCell align="right">{quantidade}</TableCell>
+                    <TableCell align="right">{valor_unitario}</TableCell>
                     <TableCell align="center">{data_venda}</TableCell>
                     <TableCell align="center">{adicionado_em}</TableCell>
                     <TableCell align="center">

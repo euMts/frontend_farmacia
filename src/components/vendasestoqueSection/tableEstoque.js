@@ -39,7 +39,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const TABLE_HEAD = [
   { id: "spacing", label: "", alignDirection: "center" },
   { id: "nome", label: "Nome", alignDirection: "center" },
-  { id: "quantidade", label: "Quantidade", alignDirection: "center" },
+  { id: "quantidade", label: "Quantidade", alignDirection: "right" },
   {
     id: "unidade_medida",
     label: "Unidade de Medida",
@@ -471,15 +471,15 @@ export default function TableEstoque() {
                                 Observação:
                               </Typography>
                               <Typography style={{ fontWeight: 300 }}>
-                                {"observacao"}
+                                {"Nenhuma."}
                               </Typography>
                             </div>
                           </div>
                         </TableCell>
                       }
                     >
-                      <TableCell align="center">{nome}</TableCell>
-                      <TableCell align="center">{quantidade}</TableCell>
+                      <TableCell align="center" style={{width: "400px"}}>{nome}</TableCell>
+                      <TableCell align="right">{quantidade}</TableCell>
                       <TableCell align="center">{unidade_medida}</TableCell>
                       <TableCell align="center">{adicionado_em}</TableCell>
                       <TableCell align="center">
