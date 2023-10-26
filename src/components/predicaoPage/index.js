@@ -114,14 +114,13 @@ const PredicaoPage = () => {
   };
 
   const handleExport = () => {
-
     const downloadCsv = (csvData) => {
       const currentDate = new Date();
       const formattedDate = `${currentDate.getDate()}-${
         currentDate.getMonth() + 1
       }-${currentDate.getFullYear()}`;
       const fileName = `predicao-${formattedDate}.csv`;
-  
+
       const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -164,33 +163,31 @@ const PredicaoPage = () => {
         }
       }
 
-      const dataArray = csv.split('\n').map((row) => {
-        const [Ano, mes, produto, venda, previsao] = row.split(';');
+      const dataArray = csv.split("\n").map((row) => {
+        const [Ano, mes, produto, venda, previsao] = row.split(";");
         return { Ano, mes, produto, venda, previsao };
       });
-    
+
       // Remove any empty objects from the array
       const filteredArray = dataArray.filter((item) => !!item.Ano);
-    
+
       // Sort the array by the "Ano" property
       filteredArray.sort((a, b) => {
         const yearA = parseInt(a.Ano);
         const yearB = parseInt(b.Ano);
         return yearA - yearB;
       });
-    
+
       // Generate the sorted CSV
       let orderedCsv = "Ano;Mes;Produto;Venda;Predicao\n";
       filteredArray.forEach((item) => {
         orderedCsv += `${item.Ano};${item.mes};${item.produto};${item.venda};${item.previsao}\n`;
       });
-    
+
       return orderedCsv;
     };
 
-
-
-    downloadCsv(dataToCSV(data))
+    downloadCsv(dataToCSV(data));
   };
 
   return (
@@ -264,7 +261,25 @@ const PredicaoPage = () => {
               </FilterLinePredicaoRight>
             </FilterLinePredicao>
             {data.length > 0 ? (
-              <PredicaoChart data={data} />
+              <>
+                {console.log(data.at(-1))}
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  style={{ fontWeight: "normal", marginTop: "15px" }}
+                >
+                  A predição para{" "}
+                  <span style={{ fontWeight: "bold" }}>
+                    {data.at(-1)["name"]}
+                  </span>{" "}
+                  é de {" "}
+                  <span style={{ fontWeight: "bold" }}>
+                    {data.at(-1)["Previsão"]}
+                  </span>{" "}
+                  vendas.
+                </Typography>
+                <PredicaoChart data={data} />
+              </>
             ) : (
               <h4 style={{ marginTop: "20px" }}>
                 Selecione um produto e inicie a predição
