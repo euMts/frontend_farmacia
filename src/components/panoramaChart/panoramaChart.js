@@ -154,12 +154,12 @@ function CustomTooltip({ active, payload = [] }) {
           {mes}
         </Typography>
 
-        {payload.map(({ dataKey, payload: internalPayload }) => {
+        {payload.map(({ dataKey, payload: internalPayload }, index) => {
           const [productKey] = dataKey.split(".");
           const product = internalPayload[productKey];
 
           return (
-            <Typography key={product} variant="body2" color={colorPalette[product.id]}>
+            <Typography key={dataKey} variant="body2" color={colorPalette[product.id]}>
               {product.nome}: {product.valor}
             </Typography>
           );
@@ -227,7 +227,7 @@ function PanoramaChart({ data }) {
           <XAxis scale="auto" dataKey="mes" />
           <YAxis />
 
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomTooltip />} position={{y:0}} />
 
           {generateBar(1)}
           {generateBar(2)}
