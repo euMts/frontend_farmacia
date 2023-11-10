@@ -37,7 +37,7 @@ const PredicaoChart = ({ data }) => {
         {dataKeys.map((key, index) => (
           <Line
             key={index}
-            type="natural"
+            type="bump"
             dataKey={key}
             stroke={colorPalette[index % colorPalette.length]}
             strokeWidth={2}

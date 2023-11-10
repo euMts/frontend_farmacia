@@ -157,9 +157,9 @@ const PredicaoPage = () => {
             predictionValue = item[key];
           }
 
-          csv += `${year || "null"};${item.name};${inputValue};${
-            saleValue || "null"
-          };${predictionValue || "null"}\n`;
+          csv += `${year || " "};${item.name};${inputValue};${
+            saleValue || " "
+          };${predictionValue || " "}\n`;
         }
       }
 
